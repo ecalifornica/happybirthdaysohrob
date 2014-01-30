@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="container">
+
+      <div class="header">
+          <ul class="nav nav-pills pull-left">
+              <li><a href="#">Ends at February 8th 9pm PST</a></li>
+          </ul>
+        <ul class="nav nav-pills pull-right">
+          <li><a href="/">Home</a></li>
+          <li class="active"><a href="#">About</a></li>
+          <li><a href="http://www.twitter.com/ecalifornica">Contact</a></li>
+        </ul>
+        <h3 class="text-muted">&nbsp</h3>
+      </div>
+
+      <div class="row marketing">
+        <div class="col-lg-12">
+            <p>
+            Twitter's #hackweek was my inspiration to start this project. 
+            I've been working on a hardware-software home security project for a few months, and had the urge for a blank slate and new problems. 
+            <p>
+            I've had my eye on a few new skills to learn: Flask, OAuth, Twitter's API, Stripe's API, Javascript, D3, SQLAlchemy and Postgresql
+            </p>
+
+    </div>
+</div>
+    <div class="row marketing">
+        <div class="col-lg-12">
+
+            <ul>
+                <lh><h3>#shipit to do list:</h3></lh>
+                <li><del>Percentage funded</del></li>
+                <li>JQuery submit pledge</li>
+                <li>Twitter screen names are links in D3 SVG</li>
+                <li>Show Twitter profile images</li>
+                <li><del>Flask flash thank you message</del></li>
+                <li><del>This about page</del></li>
+                <li>Show Stripe's cut. AJAX update it as pledge is entered</li>
+                <li><del>Redo database with new columns.</del> Figure out why the Alembic migration isn't working</li>
+                <li><del>A model for storing Stripe customer object in DB.</del> Just needed to store the id.</li>
+                <li>Test customer object charge</li>
+                <li>Clean up UI and flow</li>
+                <li>Votes on mattress</li>
+                <li>Logging</li>
+                <li>Countdown for funding</li>
+                <li>Analytics</li>
+            </ul>
+        </div>
+
+    <div class="row marketing">
+        <div class="col-lg-12">
+            <p>
+            About me: 
+            </p>
+            <p>
+            I work with vim and tmux on Linode and Heroku.
+            </p>
+        </div>
+
+
+
+        </div>
+    </div>
+
+      <div class="footer">
+          <p><a href="https://twitter.com/ecalifornica">@ecalifornica</a> #hackweek</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    {% endblock %}
+

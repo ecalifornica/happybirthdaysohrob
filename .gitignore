@@ -1,0 +1,9 @@
+cruft
+*.pyc
+notes.txt
+alembic.ini
+alembic
+venv
+*.swp
+static/data.csv
+static/images
