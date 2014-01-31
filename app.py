@@ -240,7 +240,7 @@ def twitter():
         return redirect('/')
 
     # Login failed, try again. A loop if they decline to authenticate.
-    return redirect('/twitter-login/')
+    return redirect('/about/')
         
 
 @app.route('/charge', methods=['POST'])
@@ -326,6 +326,7 @@ def about():
 
 
 if __name__ == '__main__':
+    print('\n\nBEGINNING MAIN')
     # Reset the D3 data.
     with open('static/data.csv', 'w') as d3csv:
         pass
