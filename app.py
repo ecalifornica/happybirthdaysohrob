@@ -31,7 +31,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # SQLAlchemy
-engine = create_engine(os.environ['PSQL_ADDRESS'], echo=True)
+engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 
 Base = declarative_base(bind=engine)
 
