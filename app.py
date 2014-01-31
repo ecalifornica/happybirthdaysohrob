@@ -122,7 +122,7 @@ percentage_complete = 0
 def index():
     
     pledge_amount = 0
-    #print('HI: %s' % current_user.id)
+
     # This is all ugly.
 
     # Funded percentage.
@@ -131,6 +131,7 @@ def index():
         try:
             total_pledges += int(instance.pledge_amount)
         except:
+            print('passing on exception for int(instance.pledge_amount)')
             pass
     percentage_complete = int(100 * (float(total_pledges) / 681.0))
 
@@ -144,7 +145,10 @@ def index():
             screen_names.append('%s $%s' % (instance.twitter_screen_name, instance.pledge_amount))
             pledges.append('%s' % instance.pledge_amount)
             # If it is an int in the db, why doesn't it come out as the same type?
-            total_pledges += int(instance.pledge_amount)
+            try:
+                total_pledges += int(instance.pledge_amount)
+            except:
+                pass
         unfunded = 681 - total_pledges
         percentage_complete = int(100 * (float(total_pledges) / 681.0))
         print('total_pledges: %s' % total_pledges)
