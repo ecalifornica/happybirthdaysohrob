@@ -168,6 +168,7 @@ def index():
             pledge_amount = 0
 
     if current_user.is_authenticated():
+
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         #print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
@@ -191,7 +192,9 @@ def index():
 
 @app.route('/twitter-login/')
 def login():
+    print('WHY ARE WE FAILING HERE?')
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
+    print('OAUTH DANCER: %s, %s, %s' % (oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url))
     return redirect(oauth_dancer.auth.get_authorization_url())
 
 
