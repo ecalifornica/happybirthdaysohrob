@@ -247,16 +247,21 @@ def twitter():
 
 @app.route('/charge', methods=['POST'])
 def charge():
+    print('/charge POST')
 
-    #print('request.values: %s' % request.values)
+    print('request.values: %s' % request.values)
 
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+    print(1111111)
     # For Stripe display
     amount = sql_user.pledge_amount
+    print(22222222)
     # Round down
     amount = math.trunc(float(amount))
+    print(333333333)
     # Stripe expects cents
     pledge_amount_cents = amount * 100
+    print(44444444)
 
     # Create the Stripe customer for later charging.  
     # Should only do this if they don't have an id in the database?
