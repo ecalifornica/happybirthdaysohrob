@@ -6,4 +6,3 @@ alembic
 venv
 *.swp
 static/data.csv
-static/images
