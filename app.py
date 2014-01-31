@@ -196,6 +196,7 @@ def login():
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
     print('OAUTH DANCER: %s, %s, %s' % (oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url))
     print('OAUTH AUTH SECURE: %s' % oauth_dancer.auth.secure)
+    oauth_dancer.auth.secure = True
     return redirect(oauth_dancer.auth.get_authorization_url())
 
 
