@@ -24,7 +24,7 @@ stripe.api_key = stripe_keys['secret_key']
 # Flask
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = 'fuckface'
+app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
 # Flask-Login
 login_manager = LoginManager()
