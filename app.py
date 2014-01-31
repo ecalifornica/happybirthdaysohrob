@@ -265,12 +265,12 @@ def charge():
 
     # Create the Stripe customer for later charging.  
     # Should only do this if they don't have an id in the database?
-    if sql_user.stripe_customer_id is None:
-        stripe_customer = stripe.Customer.create(
-                card=request.form['stripeToken'],
-                email = request.form['stripeEmail']
-                )
-        print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
+    #if sql_user.stripe_customer_id is None:
+    stripe_customer = stripe.Customer.create(
+            card=request.form['stripeToken'],
+            email = request.form['stripeEmail']
+            )
+    print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
 
     # Charge the card
     '''
