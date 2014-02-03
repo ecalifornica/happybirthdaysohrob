@@ -255,13 +255,13 @@ def twitter():
 def charge():
     print('/charge POST')
 
-    print('request.values: %s' % request.values)
+    print('REQUEST.VALUES: %s' % request.values)
 
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     print(1111111)
     # For Stripe display
     amount = sql_user.pledge_amount
-    print(22222222)
+    print(22222223)
     # Round down
     amount = math.trunc(float(amount))
     print(333333333)
@@ -312,7 +312,10 @@ def charge():
             screen_names.append('%s $%s' % (instance.twitter_screen_name, instance.pledge_amount))
             pledges.append('%s' % instance.pledge_amount)
             # If it is an int in the db, why doesn't it come out as the same type?
-            total_pledges += int(instance.pledge_amount)
+            try:
+                total_pledges += int(instance.pledge_amount)
+            except:
+                pass
         unfunded = 681 - total_pledges
         percentage_complete = int(100 * (float(total_pledges) / 681.0))
         print('total_pledges: %s' % total_pledges)
