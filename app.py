@@ -201,7 +201,7 @@ def vote():
     print('VOTE VOTE VOTE')
 
     #if current_user.is_authenticated():
-        print('VOTE USER IS AUTHENTICATED')
+        #print('VOTE USER IS AUTHENTICATED')
 
         # Is there a better way to make this query?
         #sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
