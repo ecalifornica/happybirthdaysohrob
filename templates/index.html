@@ -101,10 +101,20 @@
                    <h1>Your choice:</h1>
                </div>
                <div class="row marketing">
-                    <button type="submit" name="vote1" class="btn btn-default" id="voteid1">
+
+
+        <form action="/vote/" method="post">
+            <!-- ugly -->
+            <!--this could be better with ajax-->
+            <input class="btn btn-default" type="submit" value="valuevote1" name="namevote1">
+        </form>
+
+        <!--<button type="submit" name="vote1" class="btn btn-default" id="voteid1">-->
                         <span style="font-size:150%;" class="glyphicon glyphicon-ok">
                     <h4>$300</h4></span>
-                    </button> 10 votes
+            <!--</button>--> 10 votes
+
+
 <img width="33px" src="static/images/profile_images/jmcclune.jpg">
 <img width="33px" src="static/images/profile_images/pockerfish.jpg">
                     <a href="http://www.amazon.com/Signature-Sleep-Inch-Mattress-Queen/dp/B004LQ1RQU/ref=sr_1_9?m=ATVPDKIKX0DER&s=furniture&ie=UTF8&qid=1391081044&sr=1-9">
@@ -115,6 +125,7 @@
                 </div>
 
                 <div class="row marketing">
+
         <!--<button type="button" name="test" class="btn btn-default" id="barfer">-->
 
         <a role="button" href="/vote/" name="mattress_vote" class="btn btn-default" id="mattress_vote_two">
@@ -124,6 +135,7 @@
                         </span>
                     </a> 
                         <!--</button>-->
+
                     &nbsp;<img width="33px" src="static/images/profile_images/ecalifornica.jpeg">&nbsp;<img width="33px" src="static/images/profile_images/telotype.png">
                     <a href="http://www.amazon.com/Sleep-Innovations-SureTemp-Mattress-Warranty/dp/B003CT37L0/ref=sr_1_1?s=home-garden&ie=UTF8&qid=1391076900&sr=1-1&keywords=sleep+innovations">
                         <h4>Amazon memory foam mattress</h4>
