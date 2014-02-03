@@ -233,7 +233,8 @@ var svg = d3.select("#barf").append("svg")
 //.attr("xlink:href", function(d) { return d.name; })
 ;
 
-d3.csv("static/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+//d3.csv("static/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+d3.csv("/tmp/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
 
   data.forEach(function(d) {
     var y0 = 0;
