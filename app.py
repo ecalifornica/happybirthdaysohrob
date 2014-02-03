@@ -202,8 +202,8 @@ def vote():
     #print('FORM VOTE: %s' % request.form['mattress_vote']
     print('REQUEST.VALUES: %s' % request.values)
 
-    #if current_user.is_authenticated():
-        #print('VOTE USER IS AUTHENTICATED')
+    if current_user.is_authenticated():
+        print('VOTE USER IS AUTHENTICATED')
 
         # Is there a better way to make this query?
         #sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
