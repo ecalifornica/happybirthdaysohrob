@@ -200,19 +200,20 @@ def index():
 def vote():
     print('VOTE VOTE VOTE')
 
-    if current_user.is_authenticated():
+    #if current_user.is_authenticated():
         print('VOTE USER IS AUTHENTICATED')
 
         # Is there a better way to make this query?
-        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        #sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
 
-        print('FORM VOTE: %s' % request.form['mattress_vote']
+        #print('FORM VOTE: %s' % request.form['mattress_vote']
         #sql_user.mattress_vote = request.form['mattress_vote']
-        print(sql_user)
-        print('MATTRESS VOTE: %s' % sql_user.mattress_vote
-        sql_session.commit()
+        #print(sql_user)
+        #print('MATTRESS VOTE: %s' % sql_user.mattress_vote
+        #sql_session.commit()
 
-    return render_template('index.html')
+    #return render_template('index.html')
+    return ('WTF')
 
 
 
