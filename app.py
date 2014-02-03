@@ -211,7 +211,7 @@ def vote():
         sql_user.mattress_vote = request.form['mattress_vote']
         print(sql_user)
         print('MATTRESS VOTE: %s' % sql_user.mattress_vote
-        sql_session.commit()
+        #sql_session.commit()
 
     #return render_template('index.html')
     return ('WTF')
