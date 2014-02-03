@@ -137,7 +137,8 @@ def index():
 
     # This should be a function.
     total_pledges = 0
-    with open('static/data.csv', 'w') as d3csv:
+    #with open('static/data.csv', 'w') as d3csv:
+    with open('/tmp/data.csv', 'w') as d3csv:
         screen_names = []
         pledges = []
         for instance in sql_session.query(User):
@@ -235,7 +236,8 @@ def twitter():
             profile_image_url = profile_image_url.replace('normal', 'bigger')
             r = requests.get(profile_image_url)
             print('PROFILE IMAGE URL: %s' % profile_image_url)
-            filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
+            #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
+            filename = '/tmp/images/profile_images/%s.jpeg' % api.me().screen_name
             with open(filename, 'w') as file_handle:
                 file_handle.write(r.content)
                 print('FILE WRITTEN: %s' % file_handle)
@@ -261,7 +263,7 @@ def charge():
     print(1111111)
     # For Stripe display
     amount = sql_user.pledge_amount
-    print(22222223)
+    print(22222222)
     # Round down
     amount = math.trunc(float(amount))
     print(333333333)
@@ -304,7 +306,8 @@ def charge():
 
     # This should be a function.
     total_pledges = 0
-    with open('static/data.csv', 'w') as d3csv:
+    #with open('static/data.csv', 'w') as d3csv:
+    with open('/tmp/data.csv', 'w') as d3csv:
         screen_names = []
         pledges = []
         for instance in sql_session.query(User):
@@ -344,7 +347,8 @@ def about():
 if __name__ == '__main__':
     print('\n\nBEGINNING MAIN')
     # Reset the D3 data.
-    with open('static/data.csv', 'w') as d3csv:
+    #with open('static/data.csv', 'w') as d3csv:
+    with open('/tmp/data.csv', 'w') as d3csv:
         pass
 
     app.run(host='blametommy.com', port=5000)
