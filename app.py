@@ -199,7 +199,7 @@ def index():
 @app.route('/vote/', methods=['POST'])
 def vote():
     print('VOTE VOTE VOTE')
-    print('FORM VOTE: %s' % request.form['mattress_vote']
+    print('FORM VOTE: %s' % request.form['mattress_vote'])
     #print('REQUEST.VALUES: %s' % request.values)
 
     if current_user.is_authenticated():
