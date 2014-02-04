@@ -206,10 +206,10 @@ def vote():
         print('VOTE USER IS AUTHENTICATED')
 
         # Is there a better way to make this query?
-        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-        sql_user.mattress_vote = request.form['mattress_vote']
-        print(sql_user)
-        print('MATTRESS VOTE: %s' % sql_user.mattress_vote
+        #sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        #sql_user.mattress_vote = request.form['mattress_vote']
+        #print(sql_user)
+        #print('MATTRESS VOTE: %s' % sql_user.mattress_vote
         #sql_session.commit()
 
     #return render_template('index.html')
