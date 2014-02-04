@@ -290,10 +290,14 @@ def twitter():
             r = requests.get(profile_image_url)
             print('PROFILE IMAGE URL: %s' % profile_image_url)
             #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
-            filename = '/tmp/images/profile_images/%s.jpeg' % api.me().screen_name
-            with open(filename, 'w') as file_handle:
-                file_handle.write(r.content)
-                print('FILE WRITTEN: %s' % file_handle)
+            try:
+                filename = '/tmp/images/profile_images/%s.jpeg' % api.me().screen_name
+                with open(filename, 'w') as file_handle:
+                    file_handle.write(r.content)
+                    print('FILE WRITTEN: %s' % file_handle)
+            except:
+                '''Will be fixed with S3'''
+                pass
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)
