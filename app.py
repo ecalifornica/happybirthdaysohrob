@@ -205,6 +205,9 @@ def vote():
     if current_user.is_authenticated():
         print('VOTE USER IS AUTHENTICATED')
         sql_user = sql_session.query(User).filter_by(twitter_screen_name='ecalifornica').first()
+        print(sql_user)
+        sql_session.commit()
+        print('COMMIT SUCCESS?')
 
         # Is there a better way to make this query?
 #        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
