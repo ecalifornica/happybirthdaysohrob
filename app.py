@@ -200,7 +200,7 @@ def index():
 def vote():
     print('VOTE VOTE VOTE')
     print('FORM VOTE: %s' % request.form['mattress_vote']
-    print('REQUEST.VALUES: %s' % request.values)
+    #print('REQUEST.VALUES: %s' % request.values)
 
     if current_user.is_authenticated():
         print('VOTE USER IS AUTHENTICATED')
