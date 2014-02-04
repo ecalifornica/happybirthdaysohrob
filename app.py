@@ -157,7 +157,7 @@ def calculate_total_pledges():
         except:
             print('PASSING ON ROW WITH NO PLEDGE')
             pass
-   return total_pledges 
+    return total_pledges 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
