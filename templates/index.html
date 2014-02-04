@@ -86,20 +86,25 @@
         -->
     <!--</div>-->
 <!-- put the plot on its own row -->
-<div class="row marketing" style="font:Helvetica Neue;">
+<div class="row marketing" style="font:Gotham;">
 
           <!--<script src="static/plot.js"></script>-->
+    
     <div id="barf" class="col-md-6">
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
+
     <!--
            <div class="col-md-2">
            </div>
     -->
            <div class="col-md-6">
+
                <div class="row">
                    <h1>Your choice:</h1>
                </div>
+
+               <!-- vote one row -->
                <div class="row marketing">
 
 
@@ -115,7 +120,8 @@
                 
                 >
                         <span style="font-size:150%;" class="glyphicon glyphicon-ok">
-                    <h4>$300</h4></span>
+                            <h4>$300</h4>
+                        </span>
             </button> 10 votes
         </form>
 
@@ -127,8 +133,10 @@
                        <span style="maring-left:-4px;"><img src="static/images/stars_reviews_2b.png"></span>
                     </a>
                        <span style="font-size:90%;padding-left:20px;">81 customer reviews</span>
+                <!-- end vote one row  -->
                 </div>
 
+                <!-- vote two row -->
                 <div class="row marketing">
 
         <!--<button type="button" name="test" class="btn btn-default" id="barfer">-->
@@ -154,8 +162,10 @@
                         <span><img style="margin-left:-4px;" src="static/images/stars_reviews_2b.png"></span>
                 </a>
                         <span style="font-size:90%;padding-left:20px;">1,410 customer reviews</span>
+                <!-- end vote two row -->
                 </div>
                 
+                <!-- vote three row -->
                 <div class="row marketing">
 
 
@@ -183,32 +193,21 @@
                 <h4>Keetsa eco-friendly coil mattress.</h4>
             </a>
                 <p style="font-size:95%;">I own this mattress and enjoy it.</p>
+
+                <!-- end vote three row -->
                 </div>
-                <!--
-                <div class="row marketing" style="margin-top:50px;">
-                    <h4>Top pledge chooses his sheets.
-                    </h4>
-                    <img src="static/images/mickey_sheets.jpg" width="275px">
-                </div>
-                -->
+
+                <!-- end column? -->
            </div>
-           <!--
-          <p>I haven't implemented this yet, but I'd like you to help me pick which mattress we purchase for him. These are just a few examples I grabbed quickly. Please send suggestions.</p>
-<div style="margin-bottom:30px;">
-    <a href="http://www.amazon.com/Sleep-Master-8-Inch-Pocketed-Mattress/dp/B006L7RTKU/ref=sr_1_3?s=furniture&ie=UTF8&qid=1390415010&sr=1-3"><img src="static/images/amazon_spring_mattress.jpg" width="150px"><img width="300px" src="static/images/amazon_spring_price.png"></a>
-</div>
-
-<div style="margin-bottom:30px;">
-<img src="static/images/amazon_foam_mattress.jpg" width="150px"><img width="300px" src="static/images/amazon_foam_price.png">
-</div>
-
-<div>
-<img src="static/images/keetsa_price.png" width="350px">
-</div>
--->
 
 
       </div>
+
+      <!-- twitter profile photo rows test -->
+<div class="row marketing" style="font:Gotham;">
+    barf
+
+</div>
 
       <div class="footer">
           <p><a href="https://twitter.com/ecalifornica">@ecalifornica</a> <a href="https://twitter.com/search?q=%23hackweek&src=hash">#hackweek</a></p>
@@ -216,31 +215,10 @@
 
     </div> <!-- /container -->
 
-
+    <!-- Stripe -->
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
-<!--
-<script>
-  var handler = StripeCheckout.configure({
-    key: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
-    image: '/square-image.png',
-    token: function(token, args) {
-      // Use the token to create the charge with a server-side script.
-    }
-  });
-
-  document.getElementById('customButton').addEventListener('click', function(e) {
-    // Open Checkout with further options
-    handler.open({
-      name: 'Happy Birthday Sohrob!',
-      description: 'Pledge (${{ amount }})',
-      amount: 2000
-    });
-    e.preventDefault();
-  });
-</script>
--->
-
+<!-- D3 -->
 <script>
 
     var margin = {top: 20, right: 100, bottom: 30, left: 40},    
