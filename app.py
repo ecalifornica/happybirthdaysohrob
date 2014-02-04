@@ -147,7 +147,17 @@ def create_data_csv(csv_handle, total_goal):
         pledges = ','.join(pledges)
         d3csv.write(screen_names)
         d3csv.write(pledges)
+        return total_pledges
 
+def calculate_total_pledges():
+    total_pledges = 0
+    for row in sql_session.query(User):
+        try:
+            total_pledges += int(row.pledge_amount)
+        except:
+            print('PASSING ON ROW WITH NO PLEDGE')
+            pass
+   return total_pledges 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -155,9 +165,10 @@ def index():
     # This is all ugly.
 
     pledge_amount = 0
+    key=stripe_keys['publishable_key']
 
+    '''
     # Funded percentage.
-    # Why am I doing this twice?
     total_pledges = 0
     for instance in sql_session.query(User):
         try:
@@ -165,14 +176,16 @@ def index():
         except:
             print('PASSING on exception for int(instance.pledge_amount)')
             pass
-    percentage_complete = int(100 * (float(total_pledges) / 681.0))
+    '''
 
     # Iterate through the DB rows and create a CSV for D3.
-    create_data_csv('/tmp/data.csv', 682)
+    total_pledges = create_data_csv('/tmp/data.csv', 682)
+    
+    # For displaying percentage funded.
+    percentage_complete = int(100 * (float(total_pledges) / 682.0))
 
-    # Do I need to be POSTing to /?
+    # Should I be POSTing to /?
     if request.method == 'POST':
-
         try:
             pledge_amount = request.form['charge_amount']
             pledge_amount = int(pledge_amount)
@@ -181,7 +194,8 @@ def index():
             pledge_amount = 0
 
     if current_user.is_authenticated():
-
+        # Don't show sign in button.
+        sign_in = False
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         #print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
@@ -190,45 +204,43 @@ def index():
         except:
             pass
 
-        print('PLEDGE AMOUNT: %s' % pledge_amount)
         if pledge_amount is not 0 and pledge_amount is not None:
+            # Don't show pledge amount entry box.
+            enter_amount = False
+            # Pledge button text.
+            amount_button_text = 'Change Pledge Amount'
             print('PLEDGE_AMOUNT: %s, PLEDGE_AMOUNT TYPE: %s' % (pledge_amount, type(pledge_amount)))
             sql_user.pledge_amount = pledge_amount
             print('SQL_USER.PLEDGE_AMOUNT: %s' % sql_user.pledge_amount)
             sql_session.commit()
-            # This keeps cropping up as a bug. Seems like this should be caught by the above if.
+            # This keeps cropping up as a bug.
+            # Pledge amount in cents for Stripe
             pledge_amount_cents = pledge_amount * 100
-
-            try:
-                active_vote_one = False
-                print('MATTRESS VOTE: %s' % sql_user.mattress_vote)
-                '''
-                if sql_user.mattress_vote == 1:
-                    print('HEY LOOK IT S A VOTE FOR #1, make this class...')
-                    #vote_one_classes = 'btn btn-default btn-success'
-                '''
-                #active_vote = sql_user.mattress_vote
-                if sql_user.mattress_vote == 1:
-                    active_vote_one = True
-            except:
-                # Cheesy.
-                pass
+            # Placeholder for form pre-fill.
+            amount_placeholder = str(pledge_amount)
 
             #could this be done better with ajax?
             if sql_user.stripe_token is not None:
-                entercard = False
+                # Don't show enter card details button.
+                enter_card = False
             else:
-                entercard = True
-            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=entercard, percentage_complete=percentage_complete, active_vote_one = active_vote_one) 
+                # Do show enter card details button.
+                enter_card = True
+            #return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=entercard, percentage_complete=percentage_complete) 
 
         # If pledge is zero or NaN.
         else:
-            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, entercard=False, amount_button="Set Pledge Amount", pledge_amount=str(pledge_amount), percentage_complete=percentage_complete)
+            enter_amount = True
+            amount_button_text = 'Set Pledge Amount'
 
-    # If the user is not authenticated, ask them to sign in. The other variables should be redundant. 
+            #return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, entercard=False, amount_button="Set Pledge Amount", pledge_amount=str(pledge_amount), percentage_complete=percentage_complete)
+
+    # If the user is not authenticated, ask them to sign in.
     else:
-        return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
+        sign_in = True
+        #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
+    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete) 
 
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
