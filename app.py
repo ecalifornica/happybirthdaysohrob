@@ -195,6 +195,8 @@ def index():
 
             try:
                 print('MATTRESS VOTE: %s' % sql_user.mattress_vote)
+                if sql_user.mattress_vote == 1:
+                    vote_one_classes = 'btn btn-default btn-success'
             except:
                 # Cheesy.
                 pass
