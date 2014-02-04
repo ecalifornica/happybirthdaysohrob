@@ -209,7 +209,11 @@ def index():
                 pass
 
             #could this be done better with ajax?
-            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=True, percentage_complete=percentage_complete, active_vote_one = active_vote_one) 
+            if sql_user.stripe_token is not None:
+                entercard = False
+            else:
+                entercard = True
+            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=entercard, percentage_complete=percentage_complete, active_vote_one = active_vote_one) 
 
         # If pledge is zero or NaN.
         else:
