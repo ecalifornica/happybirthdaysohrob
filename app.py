@@ -135,7 +135,8 @@ def index():
             pass
     percentage_complete = int(100 * (float(total_pledges) / 681.0))
 
-    # This should be a function.
+    ###
+    # This section should be a function.
     total_pledges = 0
     #with open('static/data.csv', 'w') as d3csv:
     with open('/tmp/data.csv', 'w') as d3csv:
@@ -162,7 +163,10 @@ def index():
         pledges = ','.join(pledges)
         d3csv.write(screen_names)
         d3csv.write(pledges)
+    ###
 
+
+    # Do I need to be POSTing to /?
     if request.method == 'POST':
 
         try:
@@ -191,6 +195,7 @@ def index():
         else:
             return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, entercard=False, amount_button="Set Pledge Amount", pledge_amount=str(pledge_amount), percentage_complete=percentage_complete)
 
+    # If the user is not authenticated, ask them to sign in. The other variables should be redundant. 
     else:
         return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
@@ -212,8 +217,8 @@ def vote():
         print('COMMIT SUCCESS?')
 
 
-    #return render_template('index.html')
-    return redirect('/')
+    return render_template('index.html', vote_one_classes='btn btn-success')
+    #return redirect('/')
     #return 'WTF'
 
 
