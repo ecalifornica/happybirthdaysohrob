@@ -213,7 +213,8 @@ def vote():
 
 
     #return render_template('index.html')
-    return 'WTF'
+    return redirect('/')
+    #return 'WTF'
 
 
 
