@@ -195,15 +195,18 @@ def index():
 
             try:
                 print('MATTRESS VOTE: %s' % sql_user.mattress_vote)
+                '''
                 if sql_user.mattress_vote == 1:
                     print('HEY LOOK IT S A VOTE FOR #1, make this class...')
-                    vote_one_classes = 'btn btn-default btn-success'
+                    #vote_one_classes = 'btn btn-default btn-success'
+                '''
+                active_vote = sql_user.mattress_vote
             except:
                 # Cheesy.
                 pass
 
             #could this be done better with ajax?
-            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=True, percentage_complete=percentage_complete, vote_one_classes = vote_one_classes) 
+            return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=True, percentage_complete=percentage_complete, active_vote = active_vote) 
 
         # If pledge is zero or NaN.
         else:
