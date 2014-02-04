@@ -181,6 +181,10 @@ def index():
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         #print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
+        try:
+            pledge_amount = sql_user.pledge_amount
+        except:
+            pass
 
         if pledge_amount is not 0:
             print('pledge_amount: %s, pledge_amount type: %s' % (pledge_amount, type(pledge_amount)))
@@ -188,6 +192,13 @@ def index():
             print('sql_user.pledge_amount: %s' % sql_user.pledge_amount)
             sql_session.commit()
             pledge_amount_cents = pledge_amount * 100
+
+            try:
+                print('MATTRESS VOTE: %s' % sql_user.mattress_vote)
+            except:
+                # Cheesy.
+                pass
+
             #could this be done better with ajax?
             return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=True, percentage_complete=percentage_complete) 
 
@@ -217,8 +228,9 @@ def vote():
         print('COMMIT SUCCESS?')
 
 
-    return render_template('index.html', vote_one_classes='btn btn-success')
-    #return redirect('/')
+    #return render_template('index.html', vote_one_classes='btn btn-success')
+    #session['vote_one_classes'] = 'btn btn-success'
+    return redirect('/')
     #return 'WTF'
 
 
