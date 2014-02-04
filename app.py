@@ -117,29 +117,12 @@ user_to_add = User()
 
 percentage_complete = 0
 
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    
-    pledge_amount = 0
-
-    # This is all ugly.
-
-    # Funded percentage.
-    total_pledges = 0
-    for instance in sql_session.query(User):
-        try:
-            total_pledges += int(instance.pledge_amount)
-        except:
-            print('passing on exception for int(instance.pledge_amount)')
-            pass
-    percentage_complete = int(100 * (float(total_pledges) / 681.0))
-
-    ###
-    # This section should be a function.
+def create_data_csv(csv_handle, total_goal):
+    ''' Query the database, create a csv for D3 from rows. '''
     total_pledges = 0
     #with open('static/data.csv', 'w') as d3csv:
-    with open('/tmp/data.csv', 'w') as d3csv:
+    #with open('/tmp/data.csv', 'w') as d3csv:
+    with open(csv_handle, 'w') as d3csv:
         screen_names = []
         pledges = []
         for instance in sql_session.query(User):
@@ -151,8 +134,9 @@ def index():
                 total_pledges += int(instance.pledge_amount)
             except:
                 pass
-        unfunded = 681 - total_pledges
-        percentage_complete = int(100 * (float(total_pledges) / 681.0))
+        unfunded = total_goal - total_pledges
+        # Ugly.
+        percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
         print('total_pledges: %s' % total_pledges)
         print('percentage complete: %s' % percentage_complete)
         print(total_pledges / 681)
@@ -163,8 +147,28 @@ def index():
         pledges = ','.join(pledges)
         d3csv.write(screen_names)
         d3csv.write(pledges)
-    ###
 
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    
+    # This is all ugly.
+
+    pledge_amount = 0
+
+    # Funded percentage.
+    # Why am I doing this twice?
+    total_pledges = 0
+    for instance in sql_session.query(User):
+        try:
+            total_pledges += int(instance.pledge_amount)
+        except:
+            print('PASSING on exception for int(instance.pledge_amount)')
+            pass
+    percentage_complete = int(100 * (float(total_pledges) / 681.0))
+
+    # Iterate through the DB rows and create a CSV for D3.
+    create_data_csv('/tmp/data.csv', 682)
 
     # Do I need to be POSTing to /?
     if request.method == 'POST':
@@ -186,11 +190,13 @@ def index():
         except:
             pass
 
-        if pledge_amount is not 0:
-            print('pledge_amount: %s, pledge_amount type: %s' % (pledge_amount, type(pledge_amount)))
+        print('PLEDGE AMOUNT: %s' % pledge_amount)
+        if pledge_amount is not 0 and pledge_amount is not None:
+            print('PLEDGE_AMOUNT: %s, PLEDGE_AMOUNT TYPE: %s' % (pledge_amount, type(pledge_amount)))
             sql_user.pledge_amount = pledge_amount
-            print('sql_user.pledge_amount: %s' % sql_user.pledge_amount)
+            print('SQL_USER.PLEDGE_AMOUNT: %s' % sql_user.pledge_amount)
             sql_session.commit()
+            # This keeps cropping up as a bug. Seems like this should be caught by the above if.
             pledge_amount_cents = pledge_amount * 100
 
             try:
@@ -303,7 +309,7 @@ def twitter():
             sql_session.add(user_to_add)
             sql_session.commit()
 
-        print('LOGIN SUCCESSFUL')
+        print('LOGIN SUCCESSFUL FOR %s' % current_user.id)
         return redirect('/')
 
     # Login failed, try again. A loop if they decline to authenticate.
