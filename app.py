@@ -441,7 +441,7 @@ def charge():
     return redirect('/')
 
 
-@app.route('/change_amount')
+@app.route('/change_amount/')
 def change_amount():
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     sql_user.pledge_amount = 0
