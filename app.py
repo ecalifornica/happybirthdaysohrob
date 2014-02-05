@@ -466,10 +466,11 @@ def rollback():
     sql_session.commit()
 
 from boto.s3.key import Key
+from boto.s3.connection import S3Connection
 @app.route('/s3_test/')
 def s3_test():
     #conn = boto.connect_s3()
-    conn = boto.S3Connection()
+    conn = S3Connection()
     #bucket = conn.create_bucket('happybirthdaysohrob2')
     #k = Key(bucket)
     k = conn.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
