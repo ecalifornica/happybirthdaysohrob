@@ -177,6 +177,7 @@ def index():
     vote_one_classes = ''
     vote_two_classes = ''
     vote_three_classes = ''
+    change_amount = False
 
     # Iterate through the DB rows and create a CSV for D3.
     total_pledges = create_data_csv('/tmp/data.csv', 682)
@@ -215,6 +216,7 @@ def index():
         if pledge_amount is not 0 and pledge_amount is not None:
             # Don't show pledge amount entry box.
             enter_amount = False
+            change_amount = True
             # Pledge button text.
             amount_button_text = 'Change Pledge Amount'
             print('PLEDGE_AMOUNT: %s, PLEDGE_AMOUNT TYPE: %s' % (pledge_amount, type(pledge_amount)))
@@ -246,7 +248,7 @@ def index():
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
-    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes, pledge_amount=str(pledge_amount)) 
+    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes, pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount) 
 
 
 # Route for mattress choice form submission.

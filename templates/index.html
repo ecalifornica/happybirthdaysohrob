@@ -46,7 +46,9 @@
         </form>
         </p>
         {% else %}
-        <span style="font-size:175%; font-weight:400;">$ {{ pledge_amount }}</span>
+        {% endif %}
+        {% if change_amount %}
+        <span style="font-weight:400;">Your pledge: $ {{ pledge_amount }}</span><span>Change</span>
         {% endif %}
 
         {% if entercard %}
