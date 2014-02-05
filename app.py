@@ -468,7 +468,8 @@ def rollback():
 from boto.s3.key import Key
 @app.route('/s3_test/')
 def s3_test():
-    conn = boto.connect_s3()
+    #conn = boto.connect_s3()
+    conn = S3Connection()
     bucket = conn.create_bucket('happybirthdaysohrob2')
     k = Key(bucket)
     k.key = 'foobar'
