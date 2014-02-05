@@ -48,8 +48,7 @@
         {% else %}
         {% endif %}
         {% if change_amount %}
-        <span style="font-weight:400;">Your pledge: {{ pledge_amount }} </span><span style="font-size:60%;"><a href="/change_amount/">Change</a></span>
-        {% endif %}
+        <span style="font-weight:400;">Your pledge: {{ pledge_amount }} </span>
 
         {% if entercard %}
         <p>
@@ -69,6 +68,10 @@
         </p>
         {% else %}
         {% endif %}
+
+        <span style="font-size:60%;"><a href="/change_amount/">Change</a></span>
+        {% endif %}
+
     </div>
     {% if thank_you %}
     <div class="jumbotron">
