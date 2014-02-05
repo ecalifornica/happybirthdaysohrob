@@ -162,10 +162,9 @@ def calculate_total_pledges():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     
-    # This is all ugly.
-
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
+    amount_placeholder = str(pledge_amount)
     key=stripe_keys['publishable_key']
     enter_amount = False
 
@@ -194,7 +193,8 @@ def index():
             print("CHARGE AMOUNT: %s" % pledge_amount)
         except:
             pledge_amount = 0
-
+    
+    # If the user is signed in.
     if current_user.is_authenticated():
         # Don't show sign in button.
         sign_in = False
@@ -206,6 +206,7 @@ def index():
         except:
             pass
 
+        # If the user has actually entered and saved an amount.
         if pledge_amount is not 0 and pledge_amount is not None:
             # Don't show pledge amount entry box.
             enter_amount = False
