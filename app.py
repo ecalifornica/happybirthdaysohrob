@@ -165,7 +165,7 @@ def calculate_total_pledges():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     
-    # Flask templat variables
+    # Flask template variables.
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
@@ -173,6 +173,10 @@ def index():
     enter_amount = False
     amount_button_text = 'Set Pledge Amount'
     enter_card = False
+    # Must be a better way to do this.
+    vote_one_classes = ''
+    vote_two_classes = ''
+    vote_three_classes = ''
 
     # Iterate through the DB rows and create a CSV for D3.
     total_pledges = create_data_csv('/tmp/data.csv', 682)
@@ -191,6 +195,12 @@ def index():
             pledge_amount = sql_user.pledge_amount
         except:
             pass
+        if sql_user.mattress_vote == 1:
+            vote_one_classes = 'btn-success'
+        if sql_user.mattres_vote == 2:
+            vote_two_classes = 'btn-success'
+        if sql_user.mattress_vote == 3:
+            vote_three_classes = 'btn-success'
 
         # Should I be POSTing to /?
         if request.method == 'POST':
@@ -236,7 +246,7 @@ def index():
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete))
-    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes = 'btn btn-default btn-success') 
+    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes) 
 
 
 # Route for mattress choice form submission.
