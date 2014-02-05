@@ -150,6 +150,27 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
+'''
+191     <div class="col-md-3">
+192         <p>
+193     <img width="66px" src="static/images/profile_images/ecalifornica.jpeg">
+194     </p>
+195     <p style="margin-top:-5px; margin-bottom:-5px;">
+196     <a href="http://www.twitter.com/ecalifornica/">@ecalifornica</a>
+197     </p>
+198     <p>
+199     $100
+200     </p>
+201 </div>
+'''
+
+def bit_bang_donor_string():
+    donor_html_string = ''
+    for row in sql_session.query(User):
+        donor_html_string += '<div class="col-md-3"><p><img width="66px" src="static/images/profile_images/%s.jpeg"></p>< style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+    return donor_html_string
+
+
 
 def calculate_total_pledges():
     total_pledges = 0
@@ -246,9 +267,10 @@ def index():
     else:
         sign_in = True
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
+    donors = bit_bang_donor_string()
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
-    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes, pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount) 
+    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes, pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
 
 
 # Route for mattress choice form submission.
