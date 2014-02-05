@@ -469,9 +469,11 @@ from boto.s3.key import Key
 @app.route('/s3_test/')
 def s3_test():
     #conn = boto.connect_s3()
-    conn = S3Connection()
-    bucket = conn.create_bucket('happybirthdaysohrob2')
-    k = Key(bucket)
+    conn = boto.S3Connection()
+    #bucket = conn.create_bucket('happybirthdaysohrob2')
+    #k = Key(bucket)
+    k = conn.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
+    k.name = 'hello/world'
     k.key = 'foobar'
     k.set_contents_from_string('Ceci n\'est pas une pipe')
     b = conn.get_bucket('happybirthdaysohrob2')
