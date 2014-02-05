@@ -48,7 +48,11 @@
         {% else %}
         {% endif %}
         {% if change_amount %}
-        <span style="font-weight:400;">Your pledge: {{ pledge_amount }} </span>
+        <span>Your pledge: </span><span style="font-weight:400;">{{ pledge_amount }} </span>
+
+
+        <span style="font-size:60%;"><a href="/change_amount/">Change</a></span>
+        {% endif %}
 
         {% if entercard %}
         <!--<p>-->
@@ -69,17 +73,7 @@
         {% else %}
         {% endif %}
 
-        <span style="font-size:60%;"><a href="/change_amount/">Change</a></span>
-        {% endif %}
-
     </div>
-    {% if thank_you %}
-    <div class="jumbotron">
-        <p>
-        {{ thank_you }}
-        </p>
-    </div>
-        {% endif %}
 
 <!--
           <p><button class="btn btn-lg btn-success" id="customButton"  href="/twitter-login/" role="button">Enter Card Data</button></p>
@@ -91,75 +85,54 @@
         </div>
         -->
     <!--</div>-->
-<!-- put the plot on its own row -->
+
 <div class="row" style="font-family:Helvetica;">
-
-          <!--<script src="static/plot.js"></script>-->
-
 <!--
     <div id="barf" class="col-md-6">
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
 -->
            <div class="col-md-12">
-
-                   <h1>Your choice:</h1>
-               </div>
-
+               <h2>Your choice:</h2>
+           </div>
 </div><!-- end your choice row -->
 
-<!-- vote one row -->
-<div class="row" style="margin-bottom:20px;">
-    <div class="col-md-6">
-<form action="/vote/" method="post">
-<!-- ugly -->
-<!--this could be better with ajax-->
-<!--<input class="btn btn-default" type="submit" value="valuevote1" name="namevote1">-->
-<button type="submit" name="mattress_vote" value="1" style="margin-right:10px;" class="btn btn-default {{ vote_one_classes }}" id="voteid1">
-<span style="font-size:150%;" class="glyphicon glyphicon-ok">
-<h4>$300</h4>
-</span>
-</button>
-<a href="http://www.amazon.com/Signature-Sleep-Inch-Mattress-Queen/dp/B004LQ1RQU/ref=sr_1_9?m=ATVPDKIKX0DER&s=furniture&ie=UTF8&qid=1391081044&sr=1-9">
-<h4>Amazon coil mattress</h4>
-<span style="margin-left:-4px;"><img src="static/images/stars_reviews_2b.png"></span>
-</a>
-<span style="padding-left:10px;">81 customer reviews</span>
-</form>
-</div>
-<!--</div>--><!-- end vote one row  -->
-
-                <!-- vote two row -->
-                <!--<div class="row marketing">-->
-<div class="col-md-6">
-
-        <!--<button type="button" name="test" class="btn btn-default" id="barfer">-->
-<!--
-        <a role="button" href="/vote/" name="mattress_vote" class="btn btn-default" id="mattress_vote_two">
--->
-        <form action="/vote/" method="post">
-
-            <button type="submit" name="mattress_vote" value="2" style="margin-right:10px;" class="btn btn-default {{ vote_two_classes }}" id="voteid1">
-                        <span style="font-size:150%;" class="glyphicon glyphicon-ok">
-                            <h4>$400</h4>
-                        </span>
+<!-- first vote row -->
+    <div class="row" style="margin-bottom:20px;">
+        <div class="col-md-6">
+            <form action="/vote/" method="post">
+            <!--this could be better with ajax-->
+            <button type="submit" name="mattress_vote" value="1" style="margin-right:10px;" class="btn btn-default {{ vote_one_classes }}" id="voteid1">
+                <span style="font-size:150%;" class="glyphicon glyphicon-ok">
+                <h4>$300</h4>
+                </span>
             </button>
-<!--
-                    </a> 
--->
-        </form>
+            <a href="http://www.amazon.com/Signature-Sleep-Inch-Mattress-Queen/dp/B004LQ1RQU/ref=sr_1_9?m=ATVPDKIKX0DER&s=furniture&ie=UTF8&qid=1391081044&sr=1-9">
+            <h4>Amazon coil mattress</h4>
+            <span style="margin-left:-4px;"><img src="static/images/stars_reviews_2b.png"></span>
+            </a>
+            <span style="padding-left:10px;">81 customer reviews</span>
+            </form>
+    </div>
 
-                    <a href="http://www.amazon.com/Sleep-Innovations-SureTemp-Mattress-Warranty/dp/B003CT37L0/ref=sr_1_1?s=home-garden&ie=UTF8&qid=1391076900&sr=1-1&keywords=sleep+innovations">
-                        <h4>Amazon memory foam mattress</h4>
-                        <span><img style="margin-left:-4px;" src="static/images/stars_reviews_2b.png"></span>
-                </a>
-                        <span style="padding-left:10px;">1,410 customer reviews</span>
-                <!-- end vote two column -->
-                </div>
-            </div><!-- end first choices row -->  
+    <div class="col-md-6">
+        <form action="/vote/" method="post">
+            <button type="submit" name="mattress_vote" value="2" style="margin-right:10px;" class="btn btn-default {{ vote_two_classes }}" id="voteid1">
+                <span style="font-size:150%;" class="glyphicon glyphicon-ok">
+                    <h4>$400</h4>
+                </span>
+            </button>
+        </form>
+        <a href="http://www.amazon.com/Sleep-Innovations-SureTemp-Mattress-Warranty/dp/B003CT37L0/ref=sr_1_1?s=home-garden&ie=UTF8&qid=1391076900&sr=1-1&keywords=sleep+innovations">
+            <h4>Amazon memory foam mattress</h4>
+                <span><img style="margin-left:-4px;" src="static/images/stars_reviews_2b.png"></span>
+        </a>
+        <span style="padding-left:10px;">1,410 customer reviews</span>
+    </div>
+</div><!-- end first votes row -->  
 
         <!-- vote three row -->
-        <div class="row" style="margin-bottom:40px; border-bottom:1px solid #e5e5e5;">
+        <div class="row" style="margin-bottom:20px; border-bottom:1px solid #e5e5e5;">
             <div class="col-md-6">
         <form action="/vote/" method="post">
             <button type="submit" name="mattress_vote" value="3" style="margin-right:10px;" class="btn btn-default {{ vote_three_classes }}" id="voteid1">
@@ -191,7 +164,7 @@
       <!-- twitter profile photo rows test -->
     <div class="row">
         <div class="col-md-12">
-            <h1>Donors:</h1>
+            <h2>Donors:</h2>
         </div>
     </div>
 <div class="row">
