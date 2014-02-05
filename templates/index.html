@@ -107,6 +107,7 @@
 
 <!-- vote one row -->
 <div class="row marketing">
+    <div class="col-md-4">
 <form action="/vote/" method="post">
 <!-- ugly -->
 <!--this could be better with ajax-->
@@ -122,16 +123,17 @@
 </a>
 <span style="font-size:90%;padding-left:20px;">81 customer reviews</span>
 </form>
-</div><!-- end vote one row  -->
+</div>
+<!--</div>--><!-- end vote one row  -->
 
                 <!-- vote two row -->
-                <div class="row marketing">
+                <!--<div class="row marketing">-->
+<div class="col-md-4">
 
         <!--<button type="button" name="test" class="btn btn-default" id="barfer">-->
 <!--
         <a role="button" href="/vote/" name="mattress_vote" class="btn btn-default" id="mattress_vote_two">
 -->
-
         <form action="/vote/" method="post">
 
             <button type="submit" name="mattress_vote" value="2" style="margin-right:10px;float:left;" class="btn btn-default {{ vote_two_classes }}" id="voteid1">
@@ -184,11 +186,16 @@
       <!-- twitter profile photo rows test -->
 <div class="row" style="font:Gotham;">
 
-    <!--<div class="col-md-3">-->
-<div class="span3">
+    <div class="col-md-3">
+        <p>
     <img width="66px" src="static/images/profile_images/ecalifornica.jpeg">
+    </p>
+    <p>
     <a href="http://www.twitter.com/ecalifornica/">@ecalifornica</a>
+    </p>
+    <p>
     $100
+    </p>
 </div>
 
 <!-- end column -->
