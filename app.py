@@ -167,6 +167,8 @@ def index():
     amount_placeholder = str(pledge_amount)
     key=stripe_keys['publishable_key']
     enter_amount = False
+    amount_button_text = 'Set Pledge Amount'
+    enter_card = False
 
     '''
     # Funded percentage.
