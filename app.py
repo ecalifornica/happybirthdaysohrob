@@ -211,6 +211,7 @@ def index():
     
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
+    print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
 
     # If the user is signed in.
     if current_user.is_authenticated():
@@ -255,6 +256,14 @@ def index():
             pledge_amount_cents = pledge_amount * 100
             # Placeholder for form pre-fill.
             amount_placeholder = str(pledge_amount)
+
+            # For the graph.
+            # Iterate through the DB rows and create a CSV for D3.
+            total_pledges = create_data_csv('/tmp/data.csv', 682)
+            
+            # For displaying percentage funded.
+            percentage_complete = int(100 * (float(total_pledges) / 682.0))
+            print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
 
             #could this be done better with ajax?
             if sql_user.stripe_token is not None:
@@ -359,20 +368,15 @@ def twitter():
 @app.route('/charge', methods=['POST'])
 def charge():
     print('/charge POST')
-
     print('REQUEST.VALUES: %s' % request.values)
 
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-    print(1111111)
     # For Stripe display
     amount = sql_user.pledge_amount
-    print(22222222)
     # Round down
     amount = math.trunc(float(amount))
-    print(333333333)
     # Stripe expects cents
     pledge_amount_cents = amount * 100
-    print(44444444)
 
     # Create the Stripe customer for later charging.  
     # Should only do this if they don't have an id in the database?
