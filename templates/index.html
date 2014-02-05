@@ -18,7 +18,7 @@
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-success">
+        <div class="alert alert-success close">
         {{ message }}
         </div>
         {% endfor %}
@@ -39,14 +39,16 @@
         <p>
         <form action="/" method="post">
             <!-- ugly -->
-            <span style="font-size:175%; font-weight:400;">$</span>
+            <span style="font-size:175%; font-weight:400; margin-top:5px;">$</span>
             <input type="text" size="5" maxlength="3" name="charge_amount" placeholder="{{ amount_placeholder }}">
             <!--this could be better with ajax-->
-            <input class="btn btn-lg btn-success" type="submit" value="{{ amount_button }}">
+            <!--<input class="btn btn-lg btn-success" type="submit" value="{{ amount_button }}">-->
+            <input class="btn btn btn-success" type="submit" value="{{ amount_button }}">
         </form>
         </p>
         {% else %}
         {% endif %}
+        <p>
         {% if change_amount %}
         <span>Your pledge: </span><span style="font-weight:400;">{{ pledge_amount }} </span>
 
@@ -72,6 +74,7 @@
         <!--</p>-->
         {% else %}
         {% endif %}
+        </p>
 
     </div>
 
