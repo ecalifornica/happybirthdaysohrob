@@ -167,7 +167,8 @@ def create_data_csv(csv_handle, total_goal):
 def bit_bang_donor_string():
     donor_html_string = ''
     for row in sql_session.query(User):
-        donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+        if row.pledge_amount is > 0:
+            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
     return donor_html_string
 
 
@@ -211,7 +212,7 @@ def index():
         sign_in = False
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-        #print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
+        print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
         try:
             pledge_amount = sql_user.pledge_amount
         except:
@@ -265,6 +266,8 @@ def index():
     # If the user is not authenticated, ask them to sign in.
     else:
         sign_in = True
+
+    # Create the donors list html string.
     donors = Markup(bit_bang_donor_string())
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
@@ -274,28 +277,20 @@ def index():
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
 def vote():
-    print('VOTE VOTE VOTE')
     print('FORM VOTE: %s' % request.form['mattress_vote'])
-    #print('REQUEST.VALUES: %s' % request.values)
 
     if current_user.is_authenticated():
-        print('VOTE USER IS AUTHENTICATED')
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         sql_user.mattress_vote = request.form['mattress_vote']
         print(sql_user)
         sql_session.commit()
-        print('COMMIT SUCCESS?')
 
-    #return render_template('index.html', vote_one_classes='btn btn-success')
-    #session['vote_one_classes'] = 'btn btn-success'
     return redirect('/')
-    #return 'WTF'
 
 
 @app.route('/twitter-login/')
 def login():
-    print('WHY ARE WE FAILING HERE?')
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
     print('OAUTH DANCER: %s, %s, %s' % (oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url))
     print('OAUTH AUTH SECURE: %s' % oauth_dancer.auth.secure)
