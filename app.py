@@ -197,7 +197,7 @@ def index():
             pass
         if sql_user.mattress_vote == 1:
             vote_one_classes = 'btn-success'
-        if sql_user.mattres_vote == 2:
+        if sql_user.mattress_vote == 2:
             vote_two_classes = 'btn-success'
         if sql_user.mattress_vote == 3:
             vote_three_classes = 'btn-success'
