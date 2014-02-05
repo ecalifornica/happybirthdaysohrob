@@ -89,14 +89,16 @@
         -->
     <!--</div>-->
 <div class="row">
-<div class="col-md-12 progress">
-        <h2>{{ percentage_complete }}%</h2>
-
-  <span class="progress-bar" role="progressbar" aria-valuenow="{{ percentage_complete }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage_complete }}%;">
-    <span class="sr-only">{{ percentage_complete }}% Complete</span>
-  </span>
-
-</div>
+    <div class="col-md-12 progress">
+        <div class="row">
+            <div class="col-md-2">
+                <span>{{ percentage_complete }}%</span>
+            </div>
+          <div class="progress-bar col-md-10" role="progressbar" aria-valuenow="{{ percentage_complete }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage_complete }}%;">
+                <span class="sr-only">{{ percentage_complete }}% Complete</span>
+          </div>
+        </div>
+    </div>
 </div>
 
 <div class="row" style="font-family:Helvetica;">
