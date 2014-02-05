@@ -137,9 +137,9 @@ def create_data_csv(csv_handle, total_goal):
         unfunded = total_goal - total_pledges
         # Ugly.
         percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
-        print('total_pledges: %s' % total_pledges)
-        print('percentage complete: %s' % percentage_complete)
-        print(total_pledges / 681)
+        print('TOTAL_PLEDGES: %s' % total_pledges)
+        print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
+        print('TOTAL PLEDGES / 682: %s' % (total_pledges / 682))
         screen_names.insert(0, 'Unfunded $%s' % unfunded)
         pledges.insert(0, str(unfunded))
         screen_names = ','.join(screen_names)
@@ -170,31 +170,12 @@ def index():
     amount_button_text = 'Set Pledge Amount'
     enter_card = False
 
-    '''
-    # Funded percentage.
-    total_pledges = 0
-    for instance in sql_session.query(User):
-        try:
-            total_pledges += int(instance.pledge_amount)
-        except:
-            print('PASSING on exception for int(instance.pledge_amount)')
-            pass
-    '''
-
     # Iterate through the DB rows and create a CSV for D3.
     total_pledges = create_data_csv('/tmp/data.csv', 682)
     
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
 
-    # Should I be POSTing to /?
-    if request.method == 'POST':
-        try:
-            pledge_amount = request.form['charge_amount']
-            pledge_amount = int(pledge_amount)
-            print("CHARGE AMOUNT: %s" % pledge_amount)
-        except:
-            pledge_amount = 0
     
     # If the user is signed in.
     if current_user.is_authenticated():
@@ -207,6 +188,15 @@ def index():
             pledge_amount = sql_user.pledge_amount
         except:
             pass
+
+        # Should I be POSTing to /?
+        if request.method == 'POST':
+            try:
+                pledge_amount = request.form['charge_amount']
+                pledge_amount = int(pledge_amount)
+                print("CHARGE AMOUNT: %s" % pledge_amount)
+            except:
+                pledge_amount = 0
 
         # If the user has actually entered and saved an amount.
         if pledge_amount is not 0 and pledge_amount is not None:
