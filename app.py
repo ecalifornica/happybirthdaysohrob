@@ -166,6 +166,7 @@ def index():
 
     pledge_amount = 0
     key=stripe_keys['publishable_key']
+    enter_amount = False
 
     '''
     # Funded percentage.
@@ -240,6 +241,7 @@ def index():
         sign_in = True
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
+    print('KEY: %s, SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s' % (key, sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete))
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete) 
 
 # Route for mattress choice form submission.
