@@ -95,6 +95,9 @@
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
 -->
+<div id="donut" class="col-md-12">
+        <h2>{{ percentage_complete }}%</h2>
+</div>
            <div class="col-md-12">
                <h2>Your choice:</h2>
            </div>
@@ -173,7 +176,6 @@
 <div class="row">
     {{ donors }}
 </div>
-
 
 
       <div class="footer">
@@ -274,6 +276,6 @@ d3.csv("/tmp/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).f
 });
 
 </script>
-<!--<script type="text/javascript" src="{{ url_for('static', filename='test.js') }}"></script>-->
+<script type="text/javascript" src="{{ url_for('static', filename='donut.js') }}"></script>
     {% endblock %}
 
