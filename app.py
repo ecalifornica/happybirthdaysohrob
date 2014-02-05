@@ -167,8 +167,13 @@ def create_data_csv(csv_handle, total_goal):
 def bit_bang_donor_string():
     donor_html_string = ''
     for row in sql_session.query(User):
-        if row.pledge_amount is not None and row.pledge_amount is > 0:
-            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+        print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
+        try:
+            if row.pledge_amount is not 0 and row.pledge_amount is not None:
+                donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+        except:
+            print('passing')
+            pass
     return donor_html_string
 
 
