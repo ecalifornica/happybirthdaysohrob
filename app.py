@@ -150,6 +150,11 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
+
+def create_donut_csv(csv_handle, total_goal):
+    total_
+
+
 '''
 191     <div class="col-md-3">
 192         <p>
@@ -168,12 +173,8 @@ def bit_bang_donor_string():
     donor_html_string = ''
     for row in sql_session.query(User):
         print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
-        try:
-            if row.pledge_amount is not 0 and row.pledge_amount is not None:
-                donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
-        except:
-            print('passing')
-            pass
+        if row.pledge_amount is not 0 and row.stripe_token is not None:
+            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
     return donor_html_string
 
 
@@ -434,8 +435,6 @@ def charge():
         d3csv.write(screen_names)
         d3csv.write(pledges)
 
-    # Return a redirect to / instead.
-    #return render_template('index.html', amount=amount, thank_you="Thank you for your pledge of $%s. You will receive an email if we reach our goal and your card is charged." % amount, percentage_complete=percentage_complete)
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
     return redirect('/')
@@ -452,6 +451,12 @@ def change_amount():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+@app.route('/rollback/')
+def rollback():
+    sql_session.rollback()
+    sql_session.commit()
 
 
 if __name__ == '__main__':
