@@ -167,7 +167,7 @@ def create_data_csv(csv_handle, total_goal):
 def bit_bang_donor_string():
     donor_html_string = ''
     for row in sql_session.query(User):
-        donor_html_string += '<div class="col-md-3"><p><img width="66px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+        donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
     return donor_html_string
 
 
