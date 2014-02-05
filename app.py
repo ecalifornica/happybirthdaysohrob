@@ -171,7 +171,6 @@ def bit_bang_donor_string():
     return donor_html_string
 
 
-
 def calculate_total_pledges():
     total_pledges = 0
     for row in sql_session.query(User):
@@ -266,7 +265,6 @@ def index():
     # If the user is not authenticated, ask them to sign in.
     else:
         sign_in = True
-        #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
     donors = Markup(bit_bang_donor_string())
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
@@ -440,6 +438,14 @@ def charge():
     #return render_template('index.html', amount=amount, thank_you="Thank you for your pledge of $%s. You will receive an email if we reach our goal and your card is charged." % amount, percentage_complete=percentage_complete)
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
+    return redirect('/')
+
+
+@app.route('/change_amount')
+def change_amount():
+    sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+    sql_user.pledge_amount = 0
+    sql_session.commit()
     return redirect('/')
 
 
