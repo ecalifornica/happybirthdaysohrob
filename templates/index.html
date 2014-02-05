@@ -46,6 +46,7 @@
         </form>
         </p>
         {% else %}
+        <span style="font-size:175%; font-weight:400;">$ {{ pledge_amount }}</span>
         {% endif %}
 
         {% if entercard %}
@@ -130,7 +131,7 @@
 
         <form action="/vote/" method="post">
 
-            <button type="submit" name="mattress_vote" value="2" style="margin-right:10px;float:left;" class="btn btn-default{{ vote_two_classes }}" id="voteid1">
+            <button type="submit" name="mattress_vote" value="2" style="margin-right:10px;float:left;" class="btn btn-default {{ vote_two_classes }}" id="voteid1">
                         <span style="font-size:150%;" class="glyphicon glyphicon-ok">
                             <h4>$400</h4>
                         </span>
@@ -168,7 +169,7 @@
 <img width="33px" src="static/images/profile_images/lubolicious.jpg">
                         -->
                         <a href="http://shop.keetsa.com/products/the-keetsa-plus">
-                            <h4>Keetsa eco-friendly coil mattress.</h4>
+                            <h4>Keetsa eco-friendly coil mattress</h4>
                         </a>
                         <p style="font-family:Gothic;">I own this mattress and enjoy it.</p>
                 </div><!-- end vote three row -->
