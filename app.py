@@ -267,7 +267,7 @@ def index():
     else:
         sign_in = True
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
-    donors = bit_bang_donor_string()
+    donors = Markup(bit_bang_donor_string())
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_one_classes, vote_two_classes=vote_two_classes, vote_three_classes=vote_three_classes, pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
