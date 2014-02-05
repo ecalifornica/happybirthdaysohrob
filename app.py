@@ -15,6 +15,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 # For downloading the Twitter profile image.
 import requests
 
+# For storing Twitter profile images in S3. 
+import boto
+
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
         'secret_key': os.environ['STRIPE_SECRET_KEY']
@@ -461,6 +464,20 @@ def about():
 def rollback():
     sql_session.rollback()
     sql_session.commit()
+
+from boto.s3.key import Key
+@app.route('/s3_test/')
+def s3_test():
+    conn = boto.connect_s3()
+    bucket = conn.create_bucket('happybirthdaysohrob2')
+    k = Key(bucket)
+    k.key = 'foobar'
+    k.set_contents_from_string('Ceci n\'est pas une pipe')
+    b = conn.get_bucket('happybirthdaysohrob2')
+    k = Key(b)
+    k.key = 'foobar'
+    print(k.get_contents_as_string())
+
 
 
 if __name__ == '__main__':
