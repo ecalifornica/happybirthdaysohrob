@@ -117,6 +117,7 @@ user_to_add = User()
 
 percentage_complete = 0
 
+
 def create_data_csv(csv_handle, total_goal):
     ''' Query the database, create a csv for D3 from rows. '''
     total_pledges = 0
@@ -149,6 +150,7 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
+
 def calculate_total_pledges():
     total_pledges = 0
     for row in sql_session.query(User):
@@ -159,9 +161,11 @@ def calculate_total_pledges():
             pass
     return total_pledges 
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     
+    # Flask templat variables
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
@@ -176,7 +180,6 @@ def index():
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
 
-    
     # If the user is signed in.
     if current_user.is_authenticated():
         # Don't show sign in button.
@@ -221,22 +224,20 @@ def index():
             else:
                 # Do show enter card details button.
                 enter_card = True
-            #return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, amount=pledge_amount_cents, amount_placeholder=str(pledge_amount), amount_button='Change Pledge Amount', entercard=entercard, percentage_complete=percentage_complete) 
 
         # If pledge is zero or NaN.
         else:
             enter_amount = True
             amount_button_text = 'Set Pledge Amount'
 
-            #return render_template('index.html', key=stripe_keys['publishable_key'], signin=False, enteramount=True, entercard=False, amount_button="Set Pledge Amount", pledge_amount=str(pledge_amount), percentage_complete=percentage_complete)
-
     # If the user is not authenticated, ask them to sign in.
     else:
         sign_in = True
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
-    print('KEY: %s, SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s' % (key, sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete))
+    print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete))
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete) 
+
 
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
