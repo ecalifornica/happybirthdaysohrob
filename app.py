@@ -236,7 +236,7 @@ def index():
         #return render_template('index.html', key=stripe_keys['publishable_key'], signin=True, percentage_complete=percentage_complete)
 
     print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete))
-    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete) 
+    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes = 'btn btn-default btn-success') 
 
 
 # Route for mattress choice form submission.
@@ -255,12 +255,10 @@ def vote():
         sql_session.commit()
         print('COMMIT SUCCESS?')
 
-
     #return render_template('index.html', vote_one_classes='btn btn-success')
     #session['vote_one_classes'] = 'btn btn-success'
     return redirect('/')
     #return 'WTF'
-
 
 
 @app.route('/twitter-login/')

@@ -86,19 +86,16 @@
         -->
     <!--</div>-->
 <!-- put the plot on its own row -->
-<div class="row marketing" style="font:Gotham;">
+<div class="row marketing" style="font-family:Gotham;">
 
           <!--<script src="static/plot.js"></script>-->
-    
+
+<!--
     <div id="barf" class="col-md-6">
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
-
-    <!--
-           <div class="col-md-2">
-           </div>
-    -->
-           <div class="col-md-6">
+-->
+           <div class="col-md-12">
 
                <div class="row">
                    <h1>Your choice:</h1>
@@ -107,13 +104,12 @@
                <!-- vote one row -->
                <div class="row marketing">
 
-
         <form action="/vote/" method="post">
             <!-- ugly -->
             <!--this could be better with ajax-->
             <!--<input class="btn btn-default" type="submit" value="valuevote1" name="namevote1">-->
 
-            <button type="submit" name="mattress_vote" value="1" class="btn btn-default" id="voteid1"
+            <button type="submit" name="mattress_vote" value="1" class="{{ vote_one_classes }}" id="voteid1"
                 {% if active_vote_one %}
                 class = "btn-success"
                 {% endif %}
@@ -146,7 +142,7 @@
 
             <button type="submit" name="mattress_vote" value="2" class="btn btn-default" id="voteid1">
                         <span style="font-size:150%;" class="glyphicon glyphicon-ok">
-                            <h4>$400</h4>
+                            $400
                         </span>
             </button>
 <!--
