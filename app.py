@@ -165,6 +165,7 @@ def index():
     # This is all ugly.
 
     pledge_amount = 0
+    pledge_amount_cents = pledge_amount * 100
     key=stripe_keys['publishable_key']
     enter_amount = False
 
