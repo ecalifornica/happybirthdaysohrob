@@ -126,20 +126,15 @@ percentage_complete = 0
 def create_data_csv(csv_handle, total_goal):
     ''' Query the database, create a csv for D3 from rows. '''
     total_pledges = 0
-    #with open('static/data.csv', 'w') as d3csv:
-    #with open('/tmp/data.csv', 'w') as d3csv:
     with open(csv_handle, 'w') as d3csv:
         screen_names = []
         pledges = []
         for instance in sql_session.query(User):
-            #d3csv.write('%s, %s\n' % (instance.screen_name, instance.pledge_amount))
             screen_names.append('%s $%s' % (instance.twitter_screen_name, instance.pledge_amount))
             pledges.append('%s' % instance.pledge_amount)
             # If it is an int in the db, why doesn't it come out as the same type?
-            try:
+            if instance.stripe_token is not None and instance.pledge_amount is not None:
                 total_pledges += int(instance.pledge_amount)
-            except:
-                pass
         unfunded = total_goal - total_pledges
         # Ugly.
         percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
@@ -167,17 +162,6 @@ def bit_bang_donor_string():
         if row.pledge_amount is not 0 and row.stripe_token is not None:
             donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
     return donor_html_string
-
-
-def calculate_total_pledges():
-    total_pledges = 0
-    for row in sql_session.query(User):
-        try:
-            total_pledges += int(row.pledge_amount)
-        except:
-            print('PASSING ON ROW WITH NO PLEDGE')
-            pass
-    return total_pledges 
 
 
 @app.route('/', methods=['GET', 'POST'])
