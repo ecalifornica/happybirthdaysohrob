@@ -4,4 +4,15 @@
 
 .mattress_three {
     background-color:#EEE453;
+    border-width:0px;
+}
+
+.mattress_two {
+    background-color:#5EEE53;
+    border-width:0px;
+}
+
+.mattress_one {
+    background-color:#E453EE;
+    border-width:0px;
 }
