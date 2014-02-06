@@ -126,6 +126,7 @@ percentage_complete = 0
 mattress_votes = [0,0,0]
 
 
+# This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
     ''' Query the database, create a csv for D3 from rows. '''
     total_pledges = 0
@@ -382,7 +383,8 @@ def charge():
     #if sql_user.stripe_customer_id is None:
     stripe_customer = stripe.Customer.create(
             card=request.form['stripeToken'],
-            email = request.form['stripeEmail']
+            email = request.form['stripeEmail'],
+            description = 'Pledge amount: %s' % amount
             )
     print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
 
