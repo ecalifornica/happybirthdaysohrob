@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<!--
     <div class="container">
 
       <div class="header">
@@ -10,11 +10,10 @@
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          <!--<li><a href="http://www.twitter.com/ecalifornica">Contact</a></li>-->
         </ul>
         <h3 class="text-muted">&nbsp</h3>
       </div>
-
+      -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
@@ -40,7 +39,7 @@
         <form action="/" method="post">
             <!-- ugly -->
             <span style="font-size:175%; font-weight:400; margin-top:15px;">$</span>
-            <input type="text" height="60px" size="5" maxlength="3" style="font-size:175%;" name="charge_amount" placeholder="{{ amount_placeholder }}">
+            <input type="text" height="50px" size="5" maxlength="3" style="font-size:175%;" name="charge_amount" placeholder="{{ amount_placeholder }}">
             <!--this could be better with ajax-->
             <!--<input class="btn btn-lg btn-success" type="submit" value="{{ amount_button }}">-->
             <input class="btn btn btn-success" type="submit" value="{{ amount_button }}">
@@ -91,16 +90,16 @@
 
 <div class="row" style="font-family:Helvetica;">
 <!--
-    <div id="barf" class="col-md-6">
+    <div id="d3plot" class="col-md-6">
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
 -->
            <div class="col-md-12">
-               <h3>Your choice</h3>
+               <h3>Your Choice</h3>
            </div>
 </div><!-- end your choice row -->
 
-<!-- first vote row -->
+<!-- first choices row -->
     <div class="row" style="margin-bottom:20px;">
         <div class="col-md-6">
             <form action="/vote/" method="post">
@@ -132,9 +131,9 @@
         </a>
         <span style="padding-left:10px;">1,410 customer reviews</span>
     </div>
-</div><!-- end first votes row -->  
+</div><!-- end first choices row -->  
 
-        <!-- vote three row -->
+        <!-- second row of choices row -->
         <div class="row" style="margin-bottom:20px; border-bottom:1px solid #e5e5e5;">
             <div class="col-md-6">
         <form action="/vote/" method="post">
@@ -144,16 +143,6 @@
                         </span>
             </button> 
         </form>
-        <!--
-                        <button type="button" name="test" class="btn btn-default btn-success" id="barfer">
-                        <span style="font-size:150%;" class="glyphicon glyphicon-ok">
-                        <h4>$682</h4>
-                        </span>
-                        </button>  
-                    &nbsp;<img width="33px" src="static/images/profile_images/ecalifornica.jpeg">&nbsp;<img width="33px" src="static/images/profile_images/telotype.png">
-                    <img width="33px" src="static/images/profile_images/clairedeleony.jpeg">&nbsp;<img width="33px" src="static/images/profile_images/jberthume.jpeg">
-<img width="33px" src="static/images/profile_images/lubolicious.jpg">
-                        -->
                         <a href="http://shop.keetsa.com/products/the-keetsa-plus">
                             <h4>Keetsa eco-friendly coil mattress</h4>
                         </a>
@@ -162,118 +151,18 @@
 
            </div><!-- end second choice row -->
 
-       <!--</div> ? -->
-
       <!-- twitter profile photo rows test -->
     <div class="row">
         <div class="col-md-12">
             <!--<h3>Friends of <a href="http://www.twitter.com/telotype">@telotype</a></h3>-->
-            <h3>Pledge ledger</h3>
+            <h3>Pledge Ledger</h3>
         </div>
     </div>
 <div class="row">
     {{ donors }}
 </div>
 
-<!--
-      <div class="footer">
-          <p><a href="https://twitter.com/ecalifornica">@ecalifornica</a> <a href="https://twitter.com/search?q=%23hackweek&src=hash">#hackweek</a></p>
-      </div>
--->
-    </div> <!-- /container -->
-
     <!-- Stripe -->
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
-<!-- D3 -->
-<script>
-
-    var margin = {top: 20, right: 100, bottom: 30, left: 40},    
-    width = 250 - margin.left - margin.right,
-    height = 850 - margin.top - margin.bottom;
-
-var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
-
-var y = d3.scale.linear()
-    .rangeRound([height, 0]);
-
-var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    var xAxis = d3.svg.axis()    
-    .scale(x)    
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()    
-.scale(y)    
-.orient("left")    
-.tickFormat(d3.format(".0%"));
-
-var svg = d3.select("#barf").append("svg")
-.attr("width", width + margin.left + margin.right)    
-.attr("height", height + margin.top + margin.bottom)  
-.append("g")
-.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-//.append("svg:a")
-//.attr("xlink:href", function(d) { return d.name; })
-;
-
-//d3.csv("static/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
-d3.csv("/tmp/data.csv", function(error, data) {  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
-
-  data.forEach(function(d) {
-    var y0 = 0;
-    d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
-    d.ages.forEach(function(d) { d.y0 /= y0; d.y1 /= y0; });
-  });
-
-  data.sort(function(a, b) { return b.ages[0].y1 - a.ages[0].y1; });
-
-  x.domain(data.map(function(d) { return d.State; }));
-
-  /*
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
-      */
-
-  var state = svg.selectAll(".state")
-      .data(data)
-    .enter().append("g")
-      .attr("class", "state")
-      .attr("transform", function(d) { return "translate(" + x(d.State) + ",0)"; });
-
-  state.selectAll("rect")
-      .data(function(d) { return d.ages; })
-    .enter().append("rect")
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.y1); })
-      .attr("height", function(d) { return y(d.y0) - y(d.y1); })
-      .style("fill", function(d) { return color(d.name); });
-
-  var legend = svg.select(".state:last-child").selectAll(".legend")
-      .data(function(d) { return d.ages; })
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d) { return "translate(" + x.rangeBand() / 1.05 + "," + y((d.y0 + d.y1) / 2) + ")"; });
-
-  legend.append("line")
-      .attr("x2", 10);
-
-  legend.append("text")
-      .attr("x", 13)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name; });
-
-});
-
-</script>
-<script type="text/javascript" src="{{ url_for('static', filename='donut.js') }}"></script>
     {% endblock %}
-

@@ -24,12 +24,27 @@
     </head>
     <body>
         <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <div class="container">
+
+      <div class="header">
+          <ul class="nav nav-pills pull-left">
+              <li> <a href="#">February 8th 2100 PST</a></li>
+          </ul>
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+        <h3 class="text-muted">&nbsp</h3>
+      </div>
+
         {% block content %}{% endblock %}
 
         <div class="footer">
             <p><a href="https://twitter.com/ecalifornica">@ecalifornica</a> <a href="https://twitter.com/search?q=%23hackweek&src=hash">#hackweek</a></p>
         </div>
 
+    </div> <!-- /container -->
     </body>
 </html>
 
