@@ -118,10 +118,12 @@ sql_session = scoped_session(sessionmaker(engine))
 # Not sure why it doesn't work as I expect without scoped_session.
 #session = sessionmaker(bind=engine)
 
+# Should this be somewhere else?
 user_to_add = User()
 
 percentage_complete = 0
 
+mattress_votes = []
 
 def create_data_csv(csv_handle, total_goal):
     ''' Query the database, create a csv for D3 from rows. '''
@@ -140,7 +142,6 @@ def create_data_csv(csv_handle, total_goal):
         percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
         print('TOTAL_PLEDGES: %s' % total_pledges)
         print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
-        print('TOTAL PLEDGES / 682: %s' % (total_pledges / 682))
         screen_names.insert(0, 'Unfunded $%s' % unfunded)
         pledges.insert(0, str(unfunded))
         screen_names = ','.join(screen_names)
@@ -149,10 +150,6 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(screen_names)
         d3csv.write(pledges)
         return total_pledges
-
-
-def create_donut_csv(csv_handle, total_goal):
-    total_
 
 
 def bit_bang_donor_string():
@@ -207,7 +204,7 @@ def index():
         if sql_user.mattress_vote == 2:
             vote_two_classes = 'btn-success'
         if sql_user.mattress_vote == 3:
-            vote_three_classes = 'btn-success'
+            vote_three_classes = 'btn-success mattress_three'
 
         # Should I be POSTing to /?
         if request.method == 'POST':
