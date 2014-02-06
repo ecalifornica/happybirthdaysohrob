@@ -160,7 +160,7 @@ def bit_bang_donor_string():
     for row in sql_session.query(User):
         print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
         if row.pledge_amount is not 0 and row.stripe_token is not None:
-            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p style="font-weight:200;">$%s Vote: %s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount, row.mattress_vote)
     return donor_html_string
 
 
