@@ -35,19 +35,20 @@
         {% endif %}
 
         {% if enteramount %}
-        <p>
+        <!--<p>-->
         <!--<form action="/" method="post" class="form-inline" role="form">-->
         <form action="/" method="post">
             <!-- ugly -->
             <!--<span style="font-weight:400; font-weight:400; padding-top:15px;">$</span>-->
             <!-- <div class="form-group">-->
-            <input type="text" size="3" maxlength="3" class="form-control" style="width:80px;" name="charge_amount" placeholder="${{ amount_placeholder }}">
+                <div class="input-append">
+            <input type="text" size="3" maxlength="3" class="form-control" name="charge_amount" placeholder="${{ amount_placeholder }}">
             <!--this could be better with ajax-->
             <!--<input class="btn btn-lg btn-success" type="submit" value="{{ amount_button }}">-->
             <input class="btn btn-primary btn-sm" type="submit" value="{{ amount_button }}">
-            <!--</div>-->
+            </div>
         </form>
-        </p>
+        <!--</p>-->
         {% else %}
         {% endif %}
         {% if change_amount %}
