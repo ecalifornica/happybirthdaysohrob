@@ -39,8 +39,8 @@
         <p>
         <form action="/" method="post">
             <!-- ugly -->
-            <span style="font-size:175%; font-weight:400; margin-top:5px;">$</span>
-            <input type="text" size="5" maxlength="3" name="charge_amount" placeholder="{{ amount_placeholder }}">
+            <span style="font-size:175%; font-weight:400; margin-top:15px;">$</span>
+            <input type="text" height="60px" size="5" maxlength="3" style="font-size:175%;" name="charge_amount" placeholder="{{ amount_placeholder }}">
             <!--this could be better with ajax-->
             <!--<input class="btn btn-lg btn-success" type="submit" value="{{ amount_button }}">-->
             <input class="btn btn btn-success" type="submit" value="{{ amount_button }}">
@@ -77,27 +77,6 @@
         </p>
 
     </div>
-
-<!--
-          <p><button class="btn btn-lg btn-success" id="customButton"  href="/twitter-login/" role="button">Enter Card Data</button></p>
--->
-<!--</div>-->
-<!--
-      <div class="row marketing">
-        <div class="col-lg-6">
-        </div>
-        -->
-    <!--</div>-->
-<!--
-<div class="row">
-    <div class="col-md-12 progress">
-        <span>{{ percentage_complete }}%</span>
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage_complete }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage_complete }}%;">
-            <span class="sr-only">{{ percentage_complete }}% Complete</span>
-        </div>
-    </div>
-</div>
--->
 
 <div class="row">
     <div class="col-md-12">
@@ -188,18 +167,19 @@
       <!-- twitter profile photo rows test -->
     <div class="row">
         <div class="col-md-12">
-            <h3>Friends of <a href="http://www.twitter.com/telotype">@telotype</a></h3>
+            <!--<h3>Friends of <a href="http://www.twitter.com/telotype">@telotype</a></h3>-->
+            <h3>Pledge ledger</h3>
         </div>
     </div>
 <div class="row">
     {{ donors }}
 </div>
 
-
+<!--
       <div class="footer">
           <p><a href="https://twitter.com/ecalifornica">@ecalifornica</a> <a href="https://twitter.com/search?q=%23hackweek&src=hash">#hackweek</a></p>
       </div>
-
+-->
     </div> <!-- /container -->
 
     <!-- Stripe -->
