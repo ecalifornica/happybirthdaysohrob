@@ -123,7 +123,8 @@ user_to_add = User()
 
 percentage_complete = 0
 
-mattress_votes = []
+mattress_votes = [0,0,0]
+
 
 def create_data_csv(csv_handle, total_goal):
     ''' Query the database, create a csv for D3 from rows. '''
@@ -137,6 +138,8 @@ def create_data_csv(csv_handle, total_goal):
             # If it is an int in the db, why doesn't it come out as the same type?
             if instance.stripe_token is not None and instance.pledge_amount is not None:
                 total_pledges += int(instance.pledge_amount)
+            if instance.mattress_vote is not None:
+                mattress_votes[int(instance.mattress_vote)-1] += 1
         unfunded = total_goal - total_pledges
         # Ugly.
         percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
@@ -162,6 +165,7 @@ def bit_bang_donor_string():
             if row.mattress_vote is not None:
                 vote_badge_class = mattress_color[int(row.mattress_vote)]
             donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p style="font-weight:700;color:%s">$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, vote_badge_class, row.pledge_amount)
+            # Modulus for new rows
     return donor_html_string
 
 
@@ -363,8 +367,7 @@ def twitter():
 
 @app.route('/charge', methods=['POST'])
 def charge():
-    print('/charge POST')
-    print('REQUEST.VALUES: %s' % request.values)
+    #print('REQUEST.VALUES: %s' % request.values)
 
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     # For Stripe display
@@ -407,6 +410,8 @@ def charge():
     
     sql_session.commit()
 
+    total_pledges = create_data_csv('/tmp/data.csv', 682)
+    '''
     # This should be a function.
     total_pledges = 0
     #with open('static/data.csv', 'w') as d3csv:
@@ -434,6 +439,7 @@ def charge():
         pledges = ','.join(pledges)
         d3csv.write(screen_names)
         d3csv.write(pledges)
+    '''
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
