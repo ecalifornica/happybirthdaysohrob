@@ -299,8 +299,8 @@ def vote():
 def login():
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
     print('OAUTH DANCER: %s, %s, %s' % (oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url))
-    print('OAUTH AUTH SECURE: %s' % oauth_dancer.auth.secure)
     oauth_dancer.auth.secure = True
+    print('OAUTH AUTH SECURE: %s' % oauth_dancer.auth.secure)
     return redirect(oauth_dancer.auth.get_authorization_url())
 
 
@@ -315,6 +315,7 @@ def twitter():
 
     # Cheesey?
     if oauth_dancer.twitter_screen_name is not None:
+        print('OAUTH_DANCER.TWITTER_SCREEN_NAME: %s' % oauth_dancer.twitter_screen_name)
 
         # Flask-Login
         session_user = flask_login_user(oauth_dancer.twitter_screen_name)
@@ -322,11 +323,13 @@ def twitter():
 
         # Is this screen name already in the database?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        print('CURRENT_USER.ID: %s' % current_user.id)
 
         # Add this screen name to the database if it is not found.
         if sql_user is None:
 
             # I think that I'm using this class incorrectly.
+            print('SESSION_USER.ID: %s' % session_user.id)
             user_to_add.twitter_screen_name = session_user.id
             user_to_add.twitter_uid = api.me().id
 
@@ -349,6 +352,7 @@ def twitter():
             except:
                 '''Will be fixed with S3'''
                 pass
+
             # S3
             conn = S3Connection()
             #k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
