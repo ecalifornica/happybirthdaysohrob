@@ -17,6 +17,8 @@ import requests
 
 # For storing Twitter profile images in S3. 
 import boto
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
@@ -349,13 +351,24 @@ def twitter():
             print('PROFILE IMAGE URL: %s' % profile_image_url)
             #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
             try:
-                filename = '/tmp/images/profile_images/%s.jpeg' % api.me().screen_name
+                # they're not all jpegs
+                filename = '/tmp/%s.jpeg' % api.me().screen_name
                 with open(filename, 'w') as file_handle:
                     file_handle.write(r.content)
                     print('FILE WRITTEN: %s' % file_handle)
             except:
                 '''Will be fixed with S3'''
                 pass
+            # S3
+            conn = S3Connection()
+            #k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
+            #k.name = 'hello/world'
+            bucket = conn.get_bucket('happybirthdaysohrob')
+            k = Key(bucket)
+            k.key = '%s' % current_user.id
+            k.set_contents_from_filename(filename)
+
+
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)
@@ -482,9 +495,7 @@ def s3_test():
     k = Key(b)
     k.key = 'foobar'
     print(k.get_contents_as_string())
-    print('HELLO WORLD')
     return(k.get_contents_as_string())
-
 
 
 if __name__ == '__main__':
