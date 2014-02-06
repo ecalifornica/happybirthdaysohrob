@@ -478,7 +478,7 @@ def s3_test():
     k.name = 'hello/world'
     k.key = 'foobar'
     k.set_contents_from_string('Ceci n\'est pas une pipe')
-    b = conn.get_bucket('happybirthdaysohrob2')
+    b = conn.get_bucket('happybirthdaysohrob')
     k = Key(b)
     k.key = 'foobar'
     print(k.get_contents_as_string())
