@@ -160,26 +160,12 @@ def create_donut_csv(csv_handle, total_goal):
     total_
 
 
-'''
-191     <div class="col-md-3">
-192         <p>
-193     <img width="66px" src="static/images/profile_images/ecalifornica.jpeg">
-194     </p>
-195     <p style="margin-top:-5px; margin-bottom:-5px;">
-196     <a href="http://www.twitter.com/ecalifornica/">@ecalifornica</a>
-197     </p>
-198     <p>
-199     $100
-200     </p>
-201 </div>
-'''
-
 def bit_bang_donor_string():
     donor_html_string = ''
     for row in sql_session.query(User):
         print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
         if row.pledge_amount is not 0 and row.stripe_token is not None:
-            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="static/images/profile_images/%s.jpeg" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_screen_name, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
+            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p>$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, row.pledge_amount)
     return donor_html_string
 
 
@@ -373,6 +359,7 @@ def twitter():
             k.key = '%s' % filename
             k.set_contents_from_filename(filepath)
             k.set_acl('public-read')
+            user_to_add.twitter_photo = filename
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)
