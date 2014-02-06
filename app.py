@@ -355,8 +355,9 @@ def twitter():
             #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
             try:
                 # they're not all jpegs
-                filename = '/tmp/%s.%s' % (api.me().screen_name, filetype)
-                with open(filename, 'w') as file_handle:
+                filename = '%s.%s' % (api.me().screen_name, filetype)
+                filepath = '/tmp/%s' % filename
+                with open(filepath, 'w') as file_handle:
                     file_handle.write(r.content)
                     print('FILE WRITTEN: %s' % file_handle)
             except:
@@ -368,10 +369,10 @@ def twitter():
             #k.name = 'hello/world'
             bucket = conn.get_bucket('happybirthdaysohrob')
             k = Key(bucket)
-            k.key = '%s' % current_user.id
-            k.set_contents_from_filename(filename)
-
-
+            #k.key = '%s' % current_user.id
+            k.key = '%s' % filename
+            k.set_contents_from_filename(filepath)
+            k.set_acl('public-read')
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)
