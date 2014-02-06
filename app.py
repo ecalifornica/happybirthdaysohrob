@@ -346,13 +346,16 @@ def twitter():
 
             # Retrieve Twitter profile image.
             profile_image_url = api.me().profile_image_url
-            profile_image_url = profile_image_url.replace('normal', 'bigger')
+            profile_image_url = profile_image_url.replace('_normal', '')
             r = requests.get(profile_image_url)
+
+            # Must be a more elegant way to do this, but I'm tired.
+            filetype = profile_image_url.split('.')[-1]
             print('PROFILE IMAGE URL: %s' % profile_image_url)
             #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
             try:
                 # they're not all jpegs
-                filename = '/tmp/%s.jpeg' % api.me().screen_name
+                filename = '/tmp/%s.%s' % (api.me().screen_name, filetype)
                 with open(filename, 'w') as file_handle:
                     file_handle.write(r.content)
                     print('FILE WRITTEN: %s' % file_handle)
