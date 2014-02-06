@@ -152,7 +152,7 @@ def create_data_csv(csv_handle, total_goal):
         return total_pledges
 
 
-mattress_color = ['', '#E453EE;', '#5EEE53;', '#EEE453;']
+mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 def bit_bang_donor_string():
     donor_html_string = ''
     vote_badge_class = ''
