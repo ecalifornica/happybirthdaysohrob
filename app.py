@@ -482,6 +482,8 @@ def s3_test():
     k = Key(b)
     k.key = 'foobar'
     print(k.get_contents_as_string())
+    print('HELLO WORLD')
+    return(k.get_contents_as_string())
 
 
 
