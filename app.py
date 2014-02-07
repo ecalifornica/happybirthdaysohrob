@@ -1,8 +1,6 @@
 import os
 import math
 import sqlalchemy
-#from sqlalchemy import create_engine, Column, Integer, String, Unicode
-#from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
 import stripe
@@ -27,7 +25,7 @@ stripe.api_key = stripe_keys['secret_key']
 
 # Flask
 app = Flask(__name__)
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
 # Twitter OAuth
@@ -166,8 +164,6 @@ def twitter():
 
         # Add this screen name to the database if it is not found.
         if sql_user is None:
-
-            # I think that I'm using this class incorrectly.
             print('SESSION_USER.ID: %s' % session_user.id)
             user_to_add.twitter_screen_name = session_user.id
             user_to_add.twitter_uid = api.me().id
@@ -207,7 +203,6 @@ def twitter():
 
 @app.route('/charge', methods=['POST'])
 def charge():
-
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     # For Stripe display
     amount = sql_user.pledge_amount
