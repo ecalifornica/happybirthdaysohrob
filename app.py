@@ -16,8 +16,8 @@ import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 # SQLAlchemy
-from models import *
-from lib import *
+#from models import *
+#from lib import *
 #uh oh
 
 stripe_keys = {
@@ -28,13 +28,15 @@ stripe.api_key = stripe_keys['secret_key']
 
 # Flask
 app = Flask(__name__)
-app.config['DEBUG'] = False
+app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
 # Twitter OAuth
+"""
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
+"""
 
 # Flask-Login
 login_manager = LoginManager()
