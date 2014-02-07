@@ -25,14 +25,23 @@ Besides buying Sohrob a new mattress, which he desperately needs, I wanted to tr
 ###To do
 
 -Use Javascript to submit forms.
+
 -D3 instead of Bootstrap for funding plot.
+
 -Display Stripe's cut in an effort to raise the amount pledged.
+
 -Logging
+
 -Javascript countdown to funding deadline.
+
 -Better CSS, less inline. 
+
 -A drawer to hide the voting choices.
+
 -Properly handle multiple rows of pledges. Less bitbanging.
+
 -Heroku https
+
 -Favicon
 
 ###Who
