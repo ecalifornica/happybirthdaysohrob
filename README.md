@@ -1,14 +1,14 @@
 #Happy Birthday Sohrob
 
-##Why
+###Why
 
 Twitter's @hackweek was my inspiration to realize this idea that I've been kicking around for months. I also felt like taking a break from my hardware-software home security project for a blank slate and new problems. 
 
-##What 
+###What 
 
 Besides buying Sohrob a new mattress, which he desperately needs, I wanted to try my hand at a few new skills or get more familiar with previously learned ones. 
 
-##How
+###How
 
 **Flask** I definitely feel much more familiar with Flask, and find myself seeing uses for it everywhere. While I see problems to surmount everywhere I look, I attempt to step back and remind myself that I can interact with my code through the browser now.
                 
@@ -22,19 +22,19 @@ Besides buying Sohrob a new mattress, which he desperately needs, I wanted to tr
 
 **S3** I've barely scratched the surface of S3/Boto, let alone the rest of the Amazon offerings. I'm happy that I can read documentation well enough to pick up libraries quickly, but I still want to find time to interact with S3 and the Twitter API without libraries.
 
-##To do
+###To do
 
-Use Javascript to submit forms.
-D3 instead of Bootstrap for funding plot.
-Display Stripe's cut in an effort to raise the amount pledged.
-Logging
-Javascript countdown to funding deadline.
-Better CSS, less inline. 
-A drawer to hide the voting choices.
-Properly handle multiple rows of pledges. Less bitbanging.
-Heroku https
-Favicon
+-Use Javascript to submit forms.
+-D3 instead of Bootstrap for funding plot.
+-Display Stripe's cut in an effort to raise the amount pledged.
+-Logging
+-Javascript countdown to funding deadline.
+-Better CSS, less inline. 
+-A drawer to hide the voting choices.
+-Properly handle multiple rows of pledges. Less bitbanging.
+-Heroku https
+-Favicon
 
-##Who
+###Who
 
-My name is Robert, I work with vim and tmux on Linode and Heroku. I would very much appreciate any notes, suggestions, ideas, and bug reports.
+My name is Robert. I work with vim and tmux on Linode and Heroku. I would very much appreciate any notes, suggestions, ideas, and bug reports.
