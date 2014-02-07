@@ -215,7 +215,8 @@ def index():
         if sql_user.pledge_amount is not None:
             pledge_amount = sql_user.pledge_amount
 
-        vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
+        if sql_user.mattress_vote is not None:
+            vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
         '''
         if sql_user.mattress_vote == 1:
             vote_one_classes = 'btn-success mattress-one'
