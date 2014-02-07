@@ -66,6 +66,7 @@ class User(Base):
         return "<User(twitter_screen_name='%s')>" % self.twitter_screen_name
 
 
+# Cheesy
 # Flask-Login user
 class flask_login_user():
     def __init__(self, twitter_screen_name):
@@ -99,7 +100,7 @@ def load_user(userid):
     return flask_login_user(userid)
 
 
-# cheesy
+# Cheesy
 class oauth_placeholder(object):
     def __init__(self):
         self.consumer_key = os.environ['TWITTER_CONSUMER_KEY']
@@ -196,7 +197,7 @@ def index():
 
     # If the user is signed in.
     if current_user.is_authenticated():
-        # Don't show sign in button.
+        # Hide sign in button.
         sign_in = False
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
@@ -330,26 +331,17 @@ def twitter():
 
             # Must be a more elegant way to do this, but I'm tired.
             filetype = profile_image_url.split('.')[-1]
-            print('PROFILE IMAGE URL: %s' % profile_image_url)
-            #filename = 'static/images/profile_images/%s.jpeg' % api.me().screen_name
-            try:
-                # they're not all jpegs
-                filename = '%s.%s' % (api.me().screen_name, filetype)
-                filepath = '/tmp/%s' % filename
-                with open(filepath, 'w') as file_handle:
-                    file_handle.write(r.content)
-                    print('FILE WRITTEN: %s' % file_handle)
-            except:
-                '''Will be fixed with S3'''
-                pass
+            filename = '%s.%s' % (api.me().screen_name, filetype)
+            filepath = '/tmp/%s' % filename
+            with open(filepath, 'w') as file_handle:
+                file_handle.write(r.content)
+                print('FILE WRITTEN: %s' % file_handle)
 
             # S3
             conn = S3Connection()
             #k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
-            #k.name = 'hello/world'
             bucket = conn.get_bucket('happybirthdaysohrob')
             k = Key(bucket)
-            #k.key = '%s' % current_user.id
             k.key = '%s' % filename
             k.set_contents_from_filename(filepath)
             k.set_acl('public-read')
@@ -362,13 +354,12 @@ def twitter():
         print('LOGIN SUCCESSFUL FOR %s' % current_user.id)
         return redirect('/')
 
-    # Login failed, try again. A loop if they decline to authenticate.
+    # Login declined, redirect to informative page.
     return redirect('/about/')
         
 
 @app.route('/charge', methods=['POST'])
 def charge():
-    #print('REQUEST.VALUES: %s' % request.values)
 
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     # For Stripe display
@@ -379,27 +370,13 @@ def charge():
     pledge_amount_cents = amount * 100
 
     # Create the Stripe customer for later charging.  
-    # Should only do this if they don't have an id in the database?
-    #if sql_user.stripe_customer_id is None:
     stripe_customer = stripe.Customer.create(
             card=request.form['stripeToken'],
             email = request.form['stripeEmail'],
             description = 'Pledge amount: %s' % amount
             )
-    print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
-
-    # Charge the card
-    '''
-    charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description='Flask Charge'
-            )
-    '''
-
+    #print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
     # Save this user's data to the users table
-
     sql_user.stripe_token = request.form['stripeToken']
     sql_user.stripe_customer_id = stripe_customer.id
     sql_user.email = request.form['stripeEmail']
@@ -413,35 +390,6 @@ def charge():
     sql_session.commit()
 
     total_pledges = create_data_csv('/tmp/data.csv', 682)
-    '''
-    # This should be a function.
-    total_pledges = 0
-    #with open('static/data.csv', 'w') as d3csv:
-    with open('/tmp/data.csv', 'w') as d3csv:
-        screen_names = []
-        pledges = []
-        for instance in sql_session.query(User):
-            #d3csv.write('%s, %s\n' % (instance.screen_name, instance.pledge_amount))
-            screen_names.append('%s $%s' % (instance.twitter_screen_name, instance.pledge_amount))
-            pledges.append('%s' % instance.pledge_amount)
-            # If it is an int in the db, why doesn't it come out as the same type?
-            try:
-                total_pledges += int(instance.pledge_amount)
-            except:
-                pass
-        unfunded = 681 - total_pledges
-        percentage_complete = int(100 * (float(total_pledges) / 681.0))
-        print('total_pledges: %s' % total_pledges)
-        print('percentage complete: %s' % percentage_complete)
-        print(total_pledges / 681)
-        screen_names.insert(0, 'Unfunded $%s' % unfunded)
-        pledges.insert(0, str(unfunded))
-        screen_names = ','.join(screen_names)
-        screen_names = '%s\n' % screen_names
-        pledges = ','.join(pledges)
-        d3csv.write(screen_names)
-        d3csv.write(pledges)
-    '''
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
@@ -461,36 +409,5 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/rollback/')
-def rollback():
-    sql_session.rollback()
-    sql_session.commit()
-
-from boto.s3.key import Key
-from boto.s3.connection import S3Connection
-from boto.s3 import connection
-@app.route('/s3_test/')
-def s3_test():
-    #conn = boto.connect_s3()
-    conn = S3Connection()
-    #bucket = conn.create_bucket('happybirthdaysohrob2')
-    #k = Key(bucket)
-    k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
-    k.name = 'hello/world'
-    k.key = 'foobar'
-    k.set_contents_from_string('Ceci n\'est pas une pipe')
-    b = conn.get_bucket('happybirthdaysohrob')
-    k = Key(b)
-    k.key = 'foobar'
-    print(k.get_contents_as_string())
-    return(k.get_contents_as_string())
-
-
 if __name__ == '__main__':
-    print('\n\nBEGINNING MAIN')
-    # Reset the D3 data.
-    #with open('static/data.csv', 'w') as d3csv:
-    with open('/tmp/data.csv', 'w') as d3csv:
-        pass
-
-    app.run(host='blametommy.com', port=5000)
+    app.run(host='blametommy.com')
