@@ -30,65 +30,57 @@ app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
+# Twitter OAuth
+consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
+
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+'''
 # Cheesy
 # Flask-Login user
 class flask_login_user():
     def __init__(self, twitter_screen_name):
         self.id = twitter_screen_name
-
     def is_authenticated(self):
         return True
-
     def is_active(self):
         return True
-
     def is_anonymous(self):
         return False
-
     def get_id(self):
         return unicode(self.id)
-
     def __repr__(self):
         return '<User %r>' % (self.id)
+'''
 
 # Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
 
-# Cheesy
+'''
 class oauth_placeholder(object):
     def __init__(self, consumer_key, consumer_secret, callback_url):
-        '''
-        self.consumer_key = os.environ['TWITTER_CONSUMER_KEY']
-        self.consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
-        self.callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
-        '''
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
         self.callback_url = callback_url
         self.access_token = None
         self.access_token_secret = None
         self.twitter_screen_name = None
-
-consumer_key = os.environ['TWITTER_CONSUMER_KEY']
-consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
-callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
-oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
+'''
 
 sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
 
-mattress_votes = [0,0,0]
-
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
-    #Query the database, create a csv for D3 from rows. 
+    '''Query the database, create a csv for D3 from rows.'''
+    mattress_votes = [0,0,0]
     total_pledges = 0
     with open(csv_handle, 'w') as d3csv:
         screen_names = []
@@ -169,7 +161,6 @@ def index():
             sql_user.pledge_amount = pledge_amount
             print('SQL_USER.PLEDGE_AMOUNT: %s' % sql_user.pledge_amount)
             sql_session.commit()
-            # This keeps cropping up as a bug.
             # Pledge amount in cents for Stripe
             pledge_amount_cents = pledge_amount * 100
             # Placeholder for form pre-fill.
@@ -183,12 +174,10 @@ def index():
             percentage_complete = int(100 * (float(total_pledges) / 682.0))
             print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
 
-            #could this be done better with ajax?
+            # This be done better with ajax?
             if sql_user.stripe_token is not None:
-                # Don't show enter card details button.
                 enter_card = False
             else:
-                # Do show enter card details button.
                 enter_card = True
 
         # If pledge is zero or NaN.
@@ -217,13 +206,14 @@ def vote():
         sql_session.commit()
     return redirect('/')
 
+oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
 @app.route('/twitter-login/')
 def login():
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
     oauth_dancer.auth.secure = True
     return redirect(oauth_dancer.auth.get_authorization_url())
 
-@app.route('/login/', methods='POST')
+@app.route('/login/')
 def twitter():
     user_to_add = User()
     token = oauth_dancer.auth.get_access_token(verifier=request.args.get('oauth_verifier'))
@@ -312,9 +302,9 @@ def charge():
     sql_user.address = request.form['stripeBillingAddressLine1']
     sql_user.zip_code = request.form['stripeBillingAddressZip']
     sql_user.country = request.form['stripeBillingAddressCountry']
-    
     sql_session.commit()
 
+    # REPLACE
     total_pledges = create_data_csv('/tmp/data.csv', 682)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)

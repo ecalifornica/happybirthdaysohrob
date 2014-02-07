@@ -14,3 +14,28 @@ def bit_bang_donor_string(user_query):
             donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p style="font-weight:700;color:%s">$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, vote_badge_class, row.pledge_amount)
             # Modulus for new rows
     return donor_html_string
+
+class oauth_placeholder(object):
+    def __init__(self, consumer_key, consumer_secret, callback_url):
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
+        self.callback_url = callback_url
+        self.access_token = None
+        self.access_token_secret = None
+        self.twitter_screen_name = None
+
+#Cheesy
+# Flask-Login user
+class flask_login_user():
+    def __init__(self, twitter_screen_name):
+        self.id = twitter_screen_name
+    def is_authenticated(self):
+        return True
+    def is_active(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return unicode(self.id)
+    def __repr__(self):
+        return '<User %r>' % (self.id)
