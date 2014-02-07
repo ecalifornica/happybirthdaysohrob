@@ -39,88 +39,14 @@ callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-"""
-# Cheesy
-# Flask-Login user
-class flask_login_user():
-    def __init__(self, twitter_screen_name):
-        self.id = twitter_screen_name
-    def is_authenticated(self):
-        return True
-    def is_active(self):
-        return True
-    def is_anonymous(self):
-        return False
-    def get_id(self):
-        return unicode(self.id)
-    def __repr__(self):
-        return '<User %r>' % (self.id)
-"""
-
 # Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
 
-"""
-class oauth_placeholder(object):
-    def __init__(self, consumer_key, consumer_secret, callback_url):
-        self.consumer_key = consumer_key
-        self.consumer_secret = consumer_secret
-        self.callback_url = callback_url
-        self.access_token = None
-        self.access_token_secret = None
-        self.twitter_screen_name = None
-"""
-
 sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
-"""
-def total_pledges(user_query):
-    total_pledges = 0
-    for row in user_query:
-        if row.stripe_token is not None and row.pledge_amount is not None:
-            total_pledges += int(row.pledge_amount)
-    return total_pledges 
-
-def mattress_votes(user_query):
-    mattress_votes = [0,0,0]
-    for row in user_query:
-        if row.mattress_vote is not None:
-            mattress_votes[int(row.mattress_vote) - 1] += 1
-    return mattress_votes
-"""
-"""
-# This should be three separate functions.
-def create_data_csv(csv_handle, total_goal):
-    mattress_votes = [0,0,0]
-    total_pledges = 0
-    with open(csv_handle, 'w') as d3csv:
-        screen_names = []
-        pledges = []
-        for instance in sql_session.query(User):
-            screen_names.append('%s $%s' % (instance.twitter_screen_name, instance.pledge_amount))
-            pledges.append('%s' % instance.pledge_amount)
-            # If it is an int in the db, why doesn't it come out as the same type?
-            if instance.stripe_token is not None and instance.pledge_amount is not None:
-                total_pledges += int(instance.pledge_amount)
-            if instance.mattress_vote is not None:
-                mattress_votes[int(instance.mattress_vote)-1] += 1
-        unfunded = total_goal - total_pledges
-        # Ugly.
-        percentage_complete = int(100 * (float(total_pledges) / float(total_goal)))
-        print('TOTAL_PLEDGES: %s' % total_pledges)
-        print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
-        screen_names.insert(0, 'Unfunded $%s' % unfunded)
-        pledges.insert(0, str(unfunded))
-        screen_names = ','.join(screen_names)
-        screen_names = '%s\n' % screen_names
-        pledges = ','.join(pledges)
-        d3csv.write(screen_names)
-        d3csv.write(pledges)
-        return total_pledges
-"""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -181,14 +107,6 @@ def index():
             # Placeholder for form pre-fill.
             amount_placeholder = str(pledge_amount)
 
-            # For the graph.
-            # Iterate through the DB rows and create a CSV for D3.
-            #total_pledges = create_data_csv('/tmp/data.csv', 682)
-            
-            # For displaying percentage funded.
-            #percentage_complete = int(100 * (float(total_pledges) / 682.0))
-            #print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
-
             # This be done better with ajax?
             if sql_user.stripe_token is not None:
                 enter_card = False
@@ -236,7 +154,6 @@ def twitter():
     oauth_dancer.twitter_screen_name = api.me().screen_name
     #print api.me().__getstate__()
 
-    # Cheesey?
     if oauth_dancer.twitter_screen_name is not None:
 
         # Flask-Login
