@@ -4,23 +4,20 @@ import sqlalchemy
 #from sqlalchemy import create_engine, Column, Integer, String, Unicode
 #from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
-
 import stripe
-
 import tweepy
-
 # Should I be using Flask-Security instead?
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
 # For downloading the Twitter profile image.
 import requests
-
 # For storing Twitter profile images in S3. 
 import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+# SQLAlchemy
+from models import *
+from lib import *
 
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
@@ -30,35 +27,26 @@ stripe.api_key = stripe_keys['secret_key']
 
 # Flask
 app = Flask(__name__)
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# SQLAlchemy
-from models import *
-
 # Cheesy
 # Flask-Login user
 class flask_login_user():
     def __init__(self, twitter_screen_name):
         self.id = twitter_screen_name
-        #self.is_authenticated = None
-        #self.is_active = None
-        #self.is_anonymous = None
 
     def is_authenticated(self):
-        #return self.authenticated
         return True
 
     def is_active(self):
-        #return self.is_active
         return True
 
     def is_anonymous(self):
-        #return self.is_anonymous
         return False
 
     def get_id(self):
@@ -67,32 +55,32 @@ class flask_login_user():
     def __repr__(self):
         return '<User %r>' % (self.id)
 
-
 # Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
 
-
 # Cheesy
 class oauth_placeholder(object):
-    def __init__(self):
+    def __init__(self, consumer_key, consumer_secret, callback_url):
+        '''
         self.consumer_key = os.environ['TWITTER_CONSUMER_KEY']
         self.consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
         self.callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
+        '''
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
+        self.callback_url = callback_url
         self.access_token = None
         self.access_token_secret = None
-        #oauth_dancer.auth = tweepy.OAuthHandler(consumer_key, consumer_secret, callback_url)
-        #auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret, self.callback_url)
         self.twitter_screen_name = None
 
-oauth_dancer = oauth_placeholder()
+consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
+oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
 
-# Not sure why it doesn't work as I expect without scoped_session.
 sql_session = scoped_session(sessionmaker(engine))
-
-# Should this be somewhere else?
-user_to_add = User()
 
 percentage_complete = 0
 
@@ -127,25 +115,6 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
-
-from lib import *
-
-
-"""
-def bit_bang_donor_string(user_query):
-    donor_html_string = ''
-    vote_badge_class = ''
-    #for row in sql_session.query(User):
-    for row in user_query:
-        print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
-        if row.pledge_amount is not 0 and row.stripe_token is not None:
-            if row.mattress_vote is not None:
-                vote_badge_class = mattress_color[int(row.mattress_vote)]
-            donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p style="font-weight:700;color:%s">$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, vote_badge_class, row.pledge_amount)
-            # Modulus for new rows
-    return donor_html_string
-"""
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     
@@ -158,7 +127,6 @@ def index():
     amount_button_text = 'Set Pledge Amount'
     enter_card = False
     change_amount = False
-
     vote_classes = ['', '', '']
 
     # Iterate through the DB rows and create a CSV for D3.
@@ -233,41 +201,31 @@ def index():
         sign_in = True
 
     # Create the donors list html string.
-
     user_query = sql_session.query(User)
     donors = Markup(bit_bang_donor_string(user_query))
 
-    print('SIGNIN: %s, ENTERAMOUNT: %s, AMOUNT: %s, AMOUNT_PLACEHOLDER: %s, AMOUNT_BUTTON: %s, ENTERCARD: %s, PERCENTAGE_COMPLETE: %s, PLEDGE_AMOUNT: %s' % (sign_in, enter_amount, pledge_amount_cents, amount_placeholder, amount_button_text, enter_card, percentage_complete, pledge_amount))
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_classes[0], vote_two_classes=vote_classes[1], vote_three_classes=vote_classes[2], pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
-
 
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
 def vote():
-    print('FORM VOTE: %s' % request.form['mattress_vote'])
-
     if current_user.is_authenticated():
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         sql_user.mattress_vote = request.form['mattress_vote']
         print(sql_user)
         sql_session.commit()
-
     return redirect('/')
-
 
 @app.route('/twitter-login/')
 def login():
     oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
-    print('OAUTH DANCER: %s, %s, %s' % (oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url))
     oauth_dancer.auth.secure = True
-    print('OAUTH AUTH SECURE: %s' % oauth_dancer.auth.secure)
     return redirect(oauth_dancer.auth.get_authorization_url())
 
-
-@app.route('/login/')
+@app.route('/login/', methods='POST')
 def twitter():
-    print('OAUTH VERIFIER: %s' % request.args.get('oauth_verifier'))
+    user_to_add = User()
     token = oauth_dancer.auth.get_access_token(verifier=request.args.get('oauth_verifier'))
     oauth_dancer.auth.set_access_token(token.key, token.secret)
     api = tweepy.API(oauth_dancer.auth)
@@ -276,7 +234,6 @@ def twitter():
 
     # Cheesey?
     if oauth_dancer.twitter_screen_name is not None:
-        print('OAUTH_DANCER.TWITTER_SCREEN_NAME: %s' % oauth_dancer.twitter_screen_name)
 
         # Flask-Login
         session_user = flask_login_user(oauth_dancer.twitter_screen_name)
@@ -326,7 +283,6 @@ def twitter():
 
     # Login declined, redirect to informative page.
     return redirect('/about/')
-        
 
 @app.route('/charge', methods=['POST'])
 def charge():
