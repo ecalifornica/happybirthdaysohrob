@@ -1,3 +1,8 @@
+# SQLAlchemy
+from sqlalchemy import create_engine, Column, Integer, String, Unicode
+engine = create_engine(os.environ['DATABASE_URL'], echo=True)
+Base = declarative_base(bind=engine)
+
 class User(Base):
     __tablename__ = 'users'
 

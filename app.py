@@ -1,14 +1,16 @@
 import os
 import math
 import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String, Unicode
+#from sqlalchemy import create_engine, Column, Integer, String, Unicode
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
+
 import stripe
 
 import tweepy
+
 # Should I be using Flask-Security instead?
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
@@ -36,6 +38,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # SQLAlchemy
+from sqlalchemy import create_engine, Column, Integer, String, Unicode
 engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 Base = declarative_base(bind=engine)
 
