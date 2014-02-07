@@ -76,7 +76,23 @@ class oauth_placeholder(object):
 sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
+"""
+def total_pledges(user_query):
+    total_pledges = 0
+    for row in user_query:
+        if row.stripe_token is not None and row.pledge_amount is not None:
+            total_pledges += int(row.pledge_amount)
+    return total_pledges 
 
+def mattress_votes(user_query):
+    mattress_votes = [0,0,0]
+    for row in user_query:
+        if row.mattress_vote is not None:
+            mattress_votes[int(row.mattress_vote) - 1] += 1
+    return mattress_votes
+"""
+
+"""
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
     '''Query the database, create a csv for D3 from rows.'''
@@ -106,6 +122,7 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(screen_names)
         d3csv.write(pledges)
         return total_pledges
+"""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -121,8 +138,8 @@ def index():
     change_amount = False
     vote_classes = ['', '', '']
 
-    # Iterate through the DB rows and create a CSV for D3.
-    total_pledges = create_data_csv('/tmp/data.csv', 682)
+    user_query  = sql_session.query(User)
+    total_pledges = total_pledges(user_query)
     
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
@@ -168,11 +185,11 @@ def index():
 
             # For the graph.
             # Iterate through the DB rows and create a CSV for D3.
-            total_pledges = create_data_csv('/tmp/data.csv', 682)
+            #total_pledges = create_data_csv('/tmp/data.csv', 682)
             
             # For displaying percentage funded.
-            percentage_complete = int(100 * (float(total_pledges) / 682.0))
-            print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
+            #percentage_complete = int(100 * (float(total_pledges) / 682.0))
+            #print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
 
             # This be done better with ajax?
             if sql_user.stripe_token is not None:
@@ -202,7 +219,6 @@ def vote():
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         sql_user.mattress_vote = request.form['mattress_vote']
-        print(sql_user)
         sql_session.commit()
     return redirect('/')
 
@@ -304,8 +320,8 @@ def charge():
     sql_user.country = request.form['stripeBillingAddressCountry']
     sql_session.commit()
 
-    # REPLACE
-    total_pledges = create_data_csv('/tmp/data.csv', 682)
+    user_query  = sql_session.query(User)
+    total_pledges = total_pledges(user_query)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)

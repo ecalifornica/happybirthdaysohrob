@@ -39,3 +39,17 @@ class flask_login_user():
         return unicode(self.id)
     def __repr__(self):
         return '<User %r>' % (self.id)
+
+def total_pledges(user_query):
+    total_pledges = 0
+    for row in user_query:
+        if row.stripe_token is not None and row.pledge_amount is not None:
+            total_pledges += int(row.pledge_amount)
+    return total_pledges 
+
+def mattress_votes(user_query):
+    mattress_votes = [0,0,0]
+    for row in user_query:
+        if row.mattress_vote is not None:
+            mattress_votes[int(row.mattress_vote) - 1] += 1
+    return mattress_votes
