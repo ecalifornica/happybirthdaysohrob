@@ -76,7 +76,7 @@ class oauth_placeholder(object):
 sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
-
+"""
 def total_pledges(user_query):
     total_pledges = 0
     for row in user_query:
@@ -90,7 +90,7 @@ def mattress_votes(user_query):
         if row.mattress_vote is not None:
             mattress_votes[int(row.mattress_vote) - 1] += 1
     return mattress_votes
-
+"""
 """
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
@@ -124,7 +124,6 @@ def create_data_csv(csv_handle, total_goal):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    
     # Flask template variables.
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
@@ -136,6 +135,7 @@ def index():
     change_amount = False
     vote_classes = ['', '', '']
 
+    print('DEBUG')
     user_query  = sql_session.query(User)
     total_pledges = total_pledges(user_query)
     

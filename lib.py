@@ -41,6 +41,7 @@ class flask_login_user():
         return '<User %r>' % (self.id)
 
 def total_pledges(user_query):
+    print('TOTAL PLEDGES FUNCTION')
     total_pledges = 0
     for row in user_query:
         if row.stripe_token is not None and row.pledge_amount is not None:
