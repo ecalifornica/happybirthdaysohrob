@@ -16,9 +16,8 @@ import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 # SQLAlchemy
-#from models import *
-#from lib import *
-#uh oh
+from models import *
+from lib import *
 
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
@@ -32,16 +31,15 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
 # Twitter OAuth
-"""
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
-"""
 
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+"""
 # Cheesy
 # Flask-Login user
 class flask_login_user():
@@ -57,12 +55,14 @@ class flask_login_user():
         return unicode(self.id)
     def __repr__(self):
         return '<User %r>' % (self.id)
+"""
 
 # Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
 
+"""
 class oauth_placeholder(object):
     def __init__(self, consumer_key, consumer_secret, callback_url):
         self.consumer_key = consumer_key
@@ -71,11 +71,12 @@ class oauth_placeholder(object):
         self.access_token = None
         self.access_token_secret = None
         self.twitter_screen_name = None
+"""
 
 sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
-"""
+
 def total_pledges(user_query):
     total_pledges = 0
     for row in user_query:
@@ -89,8 +90,8 @@ def mattress_votes(user_query):
         if row.mattress_vote is not None:
             mattress_votes[int(row.mattress_vote) - 1] += 1
     return mattress_votes
-"""
 
+"""
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
     mattress_votes = [0,0,0]
@@ -119,6 +120,7 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(screen_names)
         d3csv.write(pledges)
         return total_pledges
+"""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
