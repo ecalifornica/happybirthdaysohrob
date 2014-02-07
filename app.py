@@ -39,8 +39,9 @@ login_manager.init_app(app)
 engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 Base = declarative_base(bind=engine)
 
-
 # Move this to a separate models file.
+from models import *
+'''
 class User(Base):
     __tablename__ = 'users'
 
@@ -63,6 +64,7 @@ class User(Base):
 
     def __repr__(self):
         return "<User(twitter_screen_name='%s')>" % self.twitter_screen_name
+'''
 
 
 # Cheesy
