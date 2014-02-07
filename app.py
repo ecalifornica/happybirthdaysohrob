@@ -18,6 +18,7 @@ from boto.s3.key import Key
 # SQLAlchemy
 from models import *
 from lib import *
+#uh oh
 
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
