@@ -1,3 +1,5 @@
+mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
+
 def bit_bang_donor_string(user_query):
     donor_html_string = ''
     vote_badge_class = ''

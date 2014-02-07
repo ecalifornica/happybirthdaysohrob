@@ -127,7 +127,6 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
-mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 
 from lib import *
 
