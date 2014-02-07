@@ -103,6 +103,10 @@
         <h1 style="margin-left:63px;">{{ percentage_complete }}%</h1>
     </div>
 -->
+
+<!-- hide this if not logged in -->
+        {% if not signin %}
+
            <div class="col-md-12">
                <h3>Your Choice</h3>
            </div>
@@ -168,6 +172,10 @@
                 </div><!-- end second vote row second column -->
 
            </div><!-- end second choice row -->
+
+        {% endif %}
+<!-- end choice/vote section -->
+
 
       <!-- twitter profile photo rows test -->
     <div class="row">
