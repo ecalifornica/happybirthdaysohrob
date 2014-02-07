@@ -40,7 +40,7 @@ class flask_login_user():
     def __repr__(self):
         return '<User %r>' % (self.id)
 
-def total_pledges(user_query):
+def sum_total_pledges(user_query):
     print('TOTAL PLEDGES FUNCTION')
     total_pledges = 0
     for row in user_query:
@@ -48,7 +48,7 @@ def total_pledges(user_query):
             total_pledges += int(row.pledge_amount)
     return total_pledges 
 
-def mattress_votes(user_query):
+def tally_mattress_votes(user_query):
     mattress_votes = [0,0,0]
     for row in user_query:
         if row.mattress_vote is not None:

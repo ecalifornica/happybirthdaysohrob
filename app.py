@@ -124,7 +124,6 @@ def create_data_csv(csv_handle, total_goal):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    total_pledges = 0
     # Flask template variables.
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
@@ -138,7 +137,7 @@ def index():
 
     print('DEBUG')
     user_query  = sql_session.query(User)
-    total_pledges = total_pledges(user_query)
+    total_pledges = sum_total_pledges(user_query)
     
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
@@ -319,9 +318,8 @@ def charge():
     sql_user.country = request.form['stripeBillingAddressCountry']
     sql_session.commit()
 
-    total_pledges = 0
     user_query  = sql_session.query(User)
-    total_pledges = total_pledges(user_query)
+    total_pledges = sum_total_pledges(user_query)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
