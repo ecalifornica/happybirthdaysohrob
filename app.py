@@ -38,39 +38,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # SQLAlchemy
-'''
-from sqlalchemy import create_engine, Column, Integer, String, Unicode
-from sqlalchemy.ext.declarative import declarative_base
-engine = create_engine(os.environ['DATABASE_URL'], echo=True)
-Base = declarative_base(bind=engine)
-'''
-# Move this to a separate models file.
 from models import *
-'''
-class User(Base):
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True)
-    twitter_screen_name = Column(String)
-    pledge_amount = Column(Integer)
-    stripe_token = Column(String)
-    stripe_customer_id = Column(String)
-    email = Column(Unicode)
-    twitter_token = Column(String)
-    twitter_uid = Column(String)
-    twitter_photo = Column(Unicode)
-    mattress_vote = Column(Integer)
-    name = Column(Unicode)
-    city = Column(Unicode)
-    state = Column(Unicode)
-    address = Column(Unicode)
-    zip_code = Column(Unicode) #ha
-    country = Column(Unicode)
-
-    def __repr__(self):
-        return "<User(twitter_screen_name='%s')>" % self.twitter_screen_name
-'''
-
 
 # Cheesy
 # Flask-Login user
@@ -120,10 +88,8 @@ class oauth_placeholder(object):
 
 oauth_dancer = oauth_placeholder()
 
-
-sql_session = scoped_session(sessionmaker(engine))
 # Not sure why it doesn't work as I expect without scoped_session.
-#session = sessionmaker(bind=engine)
+sql_session = scoped_session(sessionmaker(engine))
 
 # Should this be somewhere else?
 user_to_add = User()
@@ -131,7 +97,6 @@ user_to_add = User()
 percentage_complete = 0
 
 mattress_votes = [0,0,0]
-
 
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
@@ -162,7 +127,6 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(pledges)
         return total_pledges
 
-
 mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 def bit_bang_donor_string():
     donor_html_string = ''
@@ -175,7 +139,6 @@ def bit_bang_donor_string():
             donor_html_string += '<div class="col-md-3"><p><img width="73px" src="https://s3.amazonaws.com/happybirthdaysohrob/%s" class="img-rounded"></p><p style="margin-top:-5px; margin-bottom:-5px;font-family:Helvetica"><a href="http://www.twitter.com/%s">@%s</a></p><p style="font-weight:700;color:%s">$%s</p></div>' % (row.twitter_photo, row.twitter_screen_name, row.twitter_screen_name, vote_badge_class, row.pledge_amount)
             # Modulus for new rows
     return donor_html_string
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -191,12 +154,6 @@ def index():
     change_amount = False
 
     vote_classes = ['', '', '']
-    # Must be a better way to do this.
-    '''
-    vote_one_classes = ''
-    vote_two_classes = ''
-    vote_three_classes = ''
-    '''
 
     # Iterate through the DB rows and create a CSV for D3.
     total_pledges = create_data_csv('/tmp/data.csv', 682)
@@ -217,14 +174,6 @@ def index():
 
         if sql_user.mattress_vote is not None:
             vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
-        '''
-        if sql_user.mattress_vote == 1:
-            vote_one_classes = 'btn-success mattress-one'
-        if sql_user.mattress_vote == 2:
-            vote_two_classes = 'btn-success mattress-two'
-        if sql_user.mattress_vote == 3:
-            vote_three_classes = 'btn-success mattress-three'
-        '''
 
         # Should I be POSTing to /?
         if request.method == 'POST':
@@ -408,7 +357,6 @@ def charge():
     flash(message)
     return redirect('/')
 
-
 @app.route('/change_amount/')
 def change_amount():
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
@@ -416,11 +364,9 @@ def change_amount():
     sql_session.commit()
     return redirect('/')
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 if __name__ == '__main__':
     app.run(host='blametommy.com')
