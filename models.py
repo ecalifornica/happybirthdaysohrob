@@ -1,6 +1,7 @@
 import os
 # SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Unicode
+from sqlalchemy.ext.declarative import declarative_base
 engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 Base = declarative_base(bind=engine)
 
