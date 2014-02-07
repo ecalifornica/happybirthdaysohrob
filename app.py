@@ -98,9 +98,11 @@ percentage_complete = 0
 
 mattress_votes = [0,0,0]
 
+from lib import *
 # This should be three separate functions.
+'''
 def create_data_csv(csv_handle, total_goal):
-    ''' Query the database, create a csv for D3 from rows. '''
+    #Query the database, create a csv for D3 from rows. 
     total_pledges = 0
     with open(csv_handle, 'w') as d3csv:
         screen_names = []
@@ -126,6 +128,7 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(screen_names)
         d3csv.write(pledges)
         return total_pledges
+'''
 
 mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 def bit_bang_donor_string():
