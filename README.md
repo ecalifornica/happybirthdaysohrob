@@ -6,7 +6,7 @@ Twitter's @hackweek was my inspiration to realize this idea that I've been kicki
 
 ###What 
 
-Besides buying Sohrob a new mattress, which he desperately needs, I wanted to try my hand at a few new skills or get more familiar with previously learned ones. 
+Instead of all of Sohrob's friends buying him bottles of whiskey for his birthday, I'm hoping that we can pool our funds to buy him a mattress. Besides buying Sohrob a new mattress, which he desperately needs, I wanted to try my hand at a few new skills or get more familiar with previously learned ones.
 
 ###How
 
