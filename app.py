@@ -39,7 +39,6 @@ callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-'''
 # Cheesy
 # Flask-Login user
 class flask_login_user():
@@ -55,14 +54,12 @@ class flask_login_user():
         return unicode(self.id)
     def __repr__(self):
         return '<User %r>' % (self.id)
-'''
 
 # Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
 
-'''
 class oauth_placeholder(object):
     def __init__(self, consumer_key, consumer_secret, callback_url):
         self.consumer_key = consumer_key
@@ -71,7 +68,6 @@ class oauth_placeholder(object):
         self.access_token = None
         self.access_token_secret = None
         self.twitter_screen_name = None
-'''
 
 sql_session = scoped_session(sessionmaker(engine))
 
