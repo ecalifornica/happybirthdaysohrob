@@ -92,10 +92,8 @@ def mattress_votes(user_query):
     return mattress_votes
 """
 
-"""
 # This should be three separate functions.
 def create_data_csv(csv_handle, total_goal):
-    '''Query the database, create a csv for D3 from rows.'''
     mattress_votes = [0,0,0]
     total_pledges = 0
     with open(csv_handle, 'w') as d3csv:
@@ -122,7 +120,6 @@ def create_data_csv(csv_handle, total_goal):
         d3csv.write(screen_names)
         d3csv.write(pledges)
         return total_pledges
-"""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
