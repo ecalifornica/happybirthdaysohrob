@@ -267,11 +267,15 @@ def change_amount():
 @app.route('/about')
 def about():
     print('HELLO')
+    barf = requests.headers.get('X-Forwarded-Proto')
     print(request.headers.get('X-Forwarded-Proto'))
     print(type(request.headers.get('X-Forwarded-Proto')))
     for x in request.headers:
         print(x)
     print request.url
+    print barf == 'https'
+    print barf == u'https'
+    print str(barf) == 'https'
     '''
     if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
         print('BARF BARF BARF BARF')
