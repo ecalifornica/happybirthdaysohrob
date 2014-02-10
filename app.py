@@ -49,6 +49,8 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
+    for x in request.headers:
+        print(x)
     '''
     print('HELLO')
     print(request.headers.get('X-Forwarded-Proto'))

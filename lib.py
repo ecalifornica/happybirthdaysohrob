@@ -7,7 +7,7 @@ def bit_bang_donor_string(user_query):
     vote_badge_class = ''
     #for row in sql_session.query(User):
     for row in user_query:
-        print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
+        #print('ROW.PLEDGE_AMOUNT: %s' % row.pledge_amount)
         if row.pledge_amount is not 0 and row.stripe_token is not None:
             if row.mattress_vote is not None:
                 vote_badge_class = mattress_color[int(row.mattress_vote)]
