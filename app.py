@@ -52,7 +52,7 @@ def index():
     if request.headers.get('X-Forwarded-Proto') is not 'https':
         url = request.url
         url = url.replace('http://', 'https://')
-    return redirect(url)
+        return redirect(url)
     for x in request.headers:
         print(x)
     print request.url
