@@ -266,6 +266,19 @@ def change_amount():
 """
 @app.route('/about')
 def about():
+    print('HELLO')
+    print(request.headers.get('X-Forwarded-Proto'))
+    print(type(request.headers.get('X-Forwarded-Proto')))
+    for x in request.headers:
+        print(x)
+    print request.url
+    '''
+    if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
+        print('BARF BARF BARF BARF')
+        url = request.url
+        url = url.replace('http://', 'https://')
+        return redirect(url)
+    '''
     return render_template('about.html')
 
 if __name__ == '__main__':
