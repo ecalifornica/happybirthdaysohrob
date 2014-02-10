@@ -14,7 +14,10 @@ import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 # SQLAlchemy
-from models import *
+try:
+    from models import *
+except:
+    print('working on dev environment http headers only')
 from lib import *
 
 stripe_keys = {
@@ -26,7 +29,10 @@ stripe.api_key = stripe_keys['secret_key']
 # Flask
 app = Flask(__name__)
 app.config['DEBUG'] = False
-app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
+try:
+    app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
+except:
+    app.config['SECRET_KEY'] = 'dev-env'
 
 # Twitter OAuth
 consumer_key = os.environ.get('TWITTER_CONSUMER_KEY')
