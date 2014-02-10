@@ -2,7 +2,7 @@ import os
 # SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Unicode
 from sqlalchemy.ext.declarative import declarative_base
-engine = create_engine(os.environ.get['DATABASE_URL'], echo=False)
+engine = create_engine(os.environ.get('DATABASE_URL'), echo=False)
 Base = declarative_base(bind=engine)
 
 class User(Base):

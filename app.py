@@ -18,20 +18,20 @@ from models import *
 from lib import *
 
 stripe_keys = {
-        'publishable_key': os.environ.get['STRIPE_PUBLISHABLE_KEY'],
-        'secret_key': os.environ.get['STRIPE_SECRET_KEY']
+        'publishable_key': os.environ.get('STRIPE_PUBLISHABLE_KEY'),
+        'secret_key': os.environ.get('STRIPE_SECRET_KEY')
         }
 stripe.api_key = stripe_keys['secret_key']
 
 # Flask
 app = Flask(__name__)
 app.config['DEBUG'] = False
-app.config['SECRET_KEY'] = os.environ.get['FLASK_SECRET_KEY']
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
 
 # Twitter OAuth
-consumer_key = os.environ.get['TWITTER_CONSUMER_KEY']
-consumer_secret = os.environ.get['TWITTER_CONSUMER_SECRET']
-callback_url = os.environ.get['TWITTER_OAUTH_CALLBACK_URL']
+consumer_key = os.environ.get('TWITTER_CONSUMER_KEY')
+consumer_secret = os.environ.get('TWITTER_CONSUMER_SECRET')
+callback_url = os.environ.get('TWITTER_OAUTH_CALLBACK_URL')
 
 # Flask-Login
 login_manager = LoginManager()
