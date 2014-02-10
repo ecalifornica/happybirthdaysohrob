@@ -25,5 +25,6 @@ class User(Base):
     zip_code = Column(Unicode) #ha
     country = Column(Unicode)
 
+
     def __repr__(self):
         return "<User(twitter_screen_name='%s')>" % self.twitter_screen_name
