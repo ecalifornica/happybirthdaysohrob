@@ -267,7 +267,7 @@ def change_amount():
 @app.route('/about')
 def about():
     print('HELLO')
-    barf = requests.headers.get('X-Forwarded-Proto')
+    barf = request.headers.get('X-Forwarded-Proto')
     print(request.headers.get('X-Forwarded-Proto'))
     print(type(request.headers.get('X-Forwarded-Proto')))
     for x in request.headers:
