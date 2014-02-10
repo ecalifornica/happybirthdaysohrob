@@ -49,12 +49,10 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
-    '''
-    if request.headers.get('X-Forwarded-Proto') is not 'https':
+    if request.headers.get('X-Forwarded-Proto') is not u'https':
         url = request.url
         url = url.replace('http://', 'https://')
         return redirect(url)
-    '''
     print('HELLO')
     print(request.headers.get('X-Forwarded-Proto'))
     print(type(request.headers.get('X-Forwarded-Proto')))
