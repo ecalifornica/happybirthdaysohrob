@@ -276,6 +276,10 @@ def about():
     print barf == 'https'
     print barf == u'https'
     print str(barf) == 'https'
+    print barf == 'http'
+    print barf == u'http'
+    print str(barf) == 'http'
+
     '''
     if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
         print('BARF BARF BARF BARF')
