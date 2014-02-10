@@ -49,6 +49,7 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
+    '''
     print('HELLO')
     print(request.headers.get('X-Forwarded-Proto'))
     print(type(request.headers.get('X-Forwarded-Proto')))
@@ -60,6 +61,7 @@ def index():
         url = request.url
         url = url.replace('http://', 'https://')
         return redirect(url)
+    '''
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
