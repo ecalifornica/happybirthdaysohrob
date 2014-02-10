@@ -48,10 +48,10 @@ login_manager.init_app(app)
 def load_user(userid):
     return flask_login_user(userid)
 
-sql_session = scoped_session(sessionmaker(engine))
+#sql_session = scoped_session(sessionmaker(engine))
 
 percentage_complete = 0
-
+"""
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
@@ -144,7 +144,8 @@ def index():
     donors = Markup(bit_bang_donor_string(user_query))
 
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_classes[0], vote_two_classes=vote_classes[1], vote_three_classes=vote_classes[2], pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
-
+"""
+"""
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
 def vote():
@@ -262,7 +263,7 @@ def change_amount():
     sql_user.pledge_amount = 0
     sql_session.commit()
     return redirect('/')
-
+"""
 @app.route('/about')
 def about():
     return render_template('about.html')
