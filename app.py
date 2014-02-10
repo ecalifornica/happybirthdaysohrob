@@ -49,6 +49,8 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
+    for x in request.headers:
+        print('REQUEST HEADER: %s' % x)
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
