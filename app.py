@@ -49,8 +49,11 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
+    #if request.headers.get('X-Forwarded-Proto') is not 'https':
+
     for x in request.headers:
         print(x)
+    print request.url
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
