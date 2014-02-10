@@ -50,7 +50,7 @@ percentage_complete = 0
 def index():
     # Flask template variables.
     for x in request.headers:
-        print('REQUEST HEADER: %s' % x)
+        print(x)
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
