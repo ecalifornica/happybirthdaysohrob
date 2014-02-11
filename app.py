@@ -64,6 +64,7 @@ def index():
             url = request.url
             url = url.replace('http://', 'https://')
             print(url)
+            return redirect(url)
     except:
         print('request url replacement error')
 
