@@ -48,33 +48,21 @@ percentage_complete = 0
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # Flask template variables.
-    print('HELLO')
-    barf = request.headers.get('X-Forwarded-Proto')
-    print(request.headers.get('X-Forwarded-Proto'))
-    print(type(request.headers.get('X-Forwarded-Proto')))
-    for x in request.headers:
-        print(x)
-    print request.url
-    print barf == 'https'
-    print barf == 'http'
+
+    # Redirect http to https.
+    ssl_state = request.headers.get('X-Forwarded-Proto')
+    for i in request.headers:
+        print(i)
     try:
-        if barf == 'http':
-            print('BARF BARF BARF BARF')
+        if ssl_state == 'http':
             url = request.url
             url = url.replace('http://', 'https://')
-            print(url)
+            #print(url)
             return redirect(url)
     except:
         print('request url replacement error')
 
-    '''
-    if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
-        print('BARF BARF BARF BARF')
-        url = request.url
-        url = url.replace('http://', 'https://')
-        return redirect(url)
-    '''
+    # Flask template variables.
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
