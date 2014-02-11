@@ -58,6 +58,15 @@ def index():
     print request.url
     print barf == 'https'
     print barf == 'http'
+    try:
+        if barf == 'http':
+            print('BARF BARF BARF BARF')
+            url = request.url
+            url = url.replace('http://', 'https://')
+            print(url)
+    except:
+        print('request url replacement error')
+
     '''
     if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
         print('BARF BARF BARF BARF')
