@@ -49,15 +49,16 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Flask template variables.
-    for x in request.headers:
-        print(x)
-    '''
     print('HELLO')
+    barf = request.headers.get('X-Forwarded-Proto')
     print(request.headers.get('X-Forwarded-Proto'))
     print(type(request.headers.get('X-Forwarded-Proto')))
     for x in request.headers:
         print(x)
     print request.url
+    print barf == 'https'
+    print barf == 'http'
+    '''
     if str(request.headers.get('X-Forwarded-Proto')) is not 'https':
         print('BARF BARF BARF BARF')
         url = request.url
