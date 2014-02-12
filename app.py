@@ -28,6 +28,9 @@ app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
+# Setting up PSQL for dev.
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+
 # Twitter OAuth
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
