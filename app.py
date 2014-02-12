@@ -33,6 +33,9 @@ consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
 
+#S3 Bucket
+S3_BUCKET = os.environ['S3_BUCKET']
+
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -197,8 +200,7 @@ def twitter():
 
             # S3
             conn = S3Connection()
-            #k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
-            bucket = conn.get_bucket('happybirthdaysohrob')
+            bucket = conn.get_bucket(S3_BUCKET)
             k = Key(bucket)
             k.key = '%s' % filename
             k.set_contents_from_filename(filepath)
