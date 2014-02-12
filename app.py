@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
 import stripe
 import tweepy
-# Should I be using Flask-Security instead?
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # For downloading the Twitter profile image.
 import requests
@@ -100,7 +99,6 @@ def index():
         if sql_user.mattress_vote is not None:
             vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
 
-        # Should I be POSTing to /?
         if request.method == 'POST':
             try:
                 pledge_amount = request.form['charge_amount']
@@ -125,7 +123,6 @@ def index():
             # Placeholder for form pre-fill.
             amount_placeholder = str(pledge_amount)
 
-            # This be done better with ajax?
             if sql_user.stripe_token is not None:
                 enter_card = False
             else:
@@ -193,7 +190,6 @@ def twitter():
             profile_image_url = profile_image_url.replace('_normal', '')
             r = requests.get(profile_image_url)
 
-            # Must be a more elegant way to do this, but I'm tired.
             filetype = profile_image_url.split('.')[-1]
             filename = '%s.%s' % (api.me().screen_name, filetype)
             filepath = '/tmp/%s' % filename
