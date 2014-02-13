@@ -1,5 +1,7 @@
 import os 
+# For downloading the Twitter profile image.
 import requests
+# For storing Twitter profile images in S3.
 import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -76,30 +78,21 @@ def http_to_https(request):
     return url
    
 def twitter_profile_image(api):
-    print('twitter_profile_image')
-    print(api.me().screen_name)
     profile_image_url = api.me().profile_image_url
-    print(profile_image_url)
     profile_image_url = profile_image_url.replace('_normal', '')
-    print(profile_image_url)
     r = requests.get(profile_image_url)
-    print(r)
     
     filetype = profile_image_url.split('.')[-1]
-    print(filetype)
     filename = '%s.%s' % (api.me().screen_name, filetype)
-    print(filename)
     filepath = '/tmp/%s' % filename
-    print(filepath)
     with open(filepath, 'w') as file_handle:
         file_handle.write(r.content)
 
     # S3
     conn = S3Connection()
-    print(S3_BUCKET)
     bucket = conn.get_bucket(S3_BUCKET)
     k = Key(bucket)
-    k.key = '%s' % filename
+    k.key = filename
     k.set_contents_from_filename(filepath)
     k.set_acl('public-read')
     return filename

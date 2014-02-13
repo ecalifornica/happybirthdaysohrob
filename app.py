@@ -6,15 +6,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import stripe
 import tweepy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-# For downloading the Twitter profile image.
-#import requests
-# For storing Twitter profile images in S3. 
-#import boto
-#from boto.s3.connection import S3Connection
-#from boto.s3.key import Key
+from lib import *
 # SQLAlchemy
 from models import *
-from lib import *
 
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
@@ -27,16 +21,10 @@ app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
-# Setting up PSQL for dev.
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-
 # Twitter OAuth
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
-
-#S3 Bucket
-#S3_BUCKET = os.environ['S3_BUCKET']
 
 # Flask-Login
 login_manager = LoginManager()
@@ -175,28 +163,7 @@ def twitter():
             user_to_add.twitter_screen_name = session_user.id
             user_to_add.twitter_uid = api.me().id
 
-            # Retrieve Twitter profile image.
-            '''
-            profile_image_url = api.me().profile_image_url
-            profile_image_url = profile_image_url.replace('_normal', '')
-            r = requests.get(profile_image_url)
-
-            filetype = profile_image_url.split('.')[-1]
-            filename = '%s.%s' % (api.me().screen_name, filetype)
-            filepath = '/tmp/%s' % filename
-            with open(filepath, 'w') as file_handle:
-                file_handle.write(r.content)
-                print('FILE WRITTEN: %s' % file_handle)
-
-            # S3
-            conn = S3Connection()
-            bucket = conn.get_bucket(S3_BUCKET)
-            k = Key(bucket)
-            k.key = '%s' % filename
-            k.set_contents_from_filename(filepath)
-            k.set_acl('public-read')
-            '''
-            #user_to_add.twitter_photo = filename
+            # Retrieve and store Twitter profile image.
             user_to_add.twitter_photo = twitter_profile_image(api)
 
             # Insert this new user into the database.
