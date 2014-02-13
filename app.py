@@ -69,7 +69,7 @@ def index():
         print('request url replacement error')
     '''
     if request.headers.get('X-Forwarded-Proto') == 'http':
-        http_to_https()
+        http_to_https(request)
 
     # Flask template variables.
     pledge_amount = 0
