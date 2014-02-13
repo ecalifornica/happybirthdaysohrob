@@ -211,7 +211,7 @@ def charge():
     sql_user.country = request.form['stripeBillingAddressCountry']
     sql_session.commit()
     '''
-    save_stripe_user_data(sql_user, stripe_customer)
+    save_stripe_user_data(sql_user, stripe_customer, request)
 
     user_query  = sql_session.query(User)
     total_pledges = sum_total_pledges(user_query)
