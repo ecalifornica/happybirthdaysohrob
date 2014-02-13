@@ -55,7 +55,6 @@ percentage_complete = 0
 def index():
 
     # Redirect http to https.
-    '''
     ssl_state = request.headers.get('X-Forwarded-Proto')
     for i in request.headers:
         print(i)
@@ -67,8 +66,7 @@ def index():
             return redirect(url)
     except:
         print('request url replacement error')
-    '''
-    https_check()
+    #https_check()
 
     # Flask template variables.
     pledge_amount = 0
