@@ -55,8 +55,10 @@ def tally_mattress_votes(user_query):
             mattress_votes[int(row.mattress_vote) - 1] += 1
     return mattress_votes
 
-def https_check():
+def https_check(request):
+    print('entering https_check')
     ssl_state = request.headers.get('X-Forwarded-Proto')
+    print(ssl_state)
     for i in request.headers:
         print(i)
     if ssl_state == 'http':
