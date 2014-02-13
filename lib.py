@@ -68,4 +68,26 @@ def http_to_https(request):
     url = request.url
     url = url.replace('http', 'https')
     return url
+   
+def twitter_profile_image():
+    print('twitter_profile_image')
+    print(api.me().screen_name)
+    profile_image_url = api.me().profile_iamge_url
+    profile_image_url = profile_image_url.replace('_normal', '')
+    r = requests.get(profile_image_url)
     
+    filetype = profile_image_url.split('.')[-1]
+    filename = '%s.%s' % (api.me().screen_name, filetype)
+    filepath = '/tmp/%s' % filename
+    with open(filepath, 'w') as file_handle:
+        file_handle.write(r.content)
+
+    # S3
+    conn = S3Connection()
+    print(S3_BUCKET)
+    bucket = conn.get_bucket(S3_BUCKET)
+    k = Key(bucket)
+    k.key = '%s' % filename
+    k.set_contents_from_filename(filepath)
+    k.set_acl('public-read')
+    return filename

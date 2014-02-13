@@ -176,6 +176,7 @@ def twitter():
             user_to_add.twitter_uid = api.me().id
 
             # Retrieve Twitter profile image.
+            '''
             profile_image_url = api.me().profile_image_url
             profile_image_url = profile_image_url.replace('_normal', '')
             r = requests.get(profile_image_url)
@@ -194,7 +195,9 @@ def twitter():
             k.key = '%s' % filename
             k.set_contents_from_filename(filepath)
             k.set_acl('public-read')
-            user_to_add.twitter_photo = filename
+            '''
+            #user_to_add.twitter_photo = filename
+            user_to_add.twitter_photo = twitter_profile_image()
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)
