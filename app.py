@@ -3,18 +3,19 @@ import os
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
-import stripe
+#import stripe
 import tweepy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from lib import *
 # SQLAlchemy
 from models import *
+'''
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
         'secret_key': os.environ['STRIPE_SECRET_KEY']
         }
 stripe.api_key = stripe_keys['secret_key']
-
+'''
 # Flask
 app = Flask(__name__)
 app.config['DEBUG'] = False
@@ -187,26 +188,16 @@ def charge():
     amount = format_pledge_amount(sql_user)
 
     # Create the Stripe customer for later charging.  
+    '''
     stripe_customer = stripe.Customer.create(
             card=request.form['stripeToken'],
             email = request.form['stripeEmail'],
             description = 'Pledge amount: %s' % amount
             )
-    #stripe_customer = create_stripe_customer(request, amount)
-    #print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
+    '''
+    stripe_customer = create_stripe_customer(request, amount)
+
     # Save this user's data to the users table
-    '''
-    sql_user.stripe_token = request.form['stripeToken']
-    sql_user.stripe_customer_id = stripe_customer.id
-    sql_user.email = request.form['stripeEmail']
-    sql_user.name = request.form['stripeBillingName']
-    sql_user.city = request.form['stripeBillingAddressCity']
-    sql_user.state = request.form['stripeBillingAddressState']
-    sql_user.address = request.form['stripeBillingAddressLine1']
-    sql_user.zip_code = request.form['stripeBillingAddressZip']
-    sql_user.country = request.form['stripeBillingAddressCountry']
-    sql_session.commit()
-    '''
     save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
 
     user_query  = sql_session.query(User)

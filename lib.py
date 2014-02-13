@@ -118,6 +118,7 @@ def create_stripe_customer(request, amount):
             email = request.form['stripeEmail'],
             description = 'Pledge amount: %s' % amount
             )
+    return stripe_customer
 
 def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
     # Save this user's data to the users table
