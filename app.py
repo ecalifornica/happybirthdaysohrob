@@ -55,6 +55,7 @@ percentage_complete = 0
 def index():
 
     # Redirect http to https.
+    '''
     ssl_state = request.headers.get('X-Forwarded-Proto')
     for i in request.headers:
         print(i)
@@ -66,6 +67,8 @@ def index():
             return redirect(url)
     except:
         print('request url replacement error')
+    '''
+    https_check()
 
     # Flask template variables.
     pledge_amount = 0
@@ -78,7 +81,6 @@ def index():
     change_amount = False
     vote_classes = ['', '', '']
 
-    print('DEBUG')
     user_query  = sql_session.query(User)
     total_pledges = sum_total_pledges(user_query)
     
