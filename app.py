@@ -3,19 +3,17 @@ import os
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
-#import stripe
+import stripe
 import tweepy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from lib import *
 # SQLAlchemy
 from models import *
-'''
 stripe_keys = {
         'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
         'secret_key': os.environ['STRIPE_SECRET_KEY']
         }
 stripe.api_key = stripe_keys['secret_key']
-'''
 
 # Flask
 app = Flask(__name__)
@@ -189,14 +187,12 @@ def charge():
     amount = format_pledge_amount(sql_user)
 
     # Create the Stripe customer for later charging.  
-    '''
     stripe_customer = stripe.Customer.create(
             card=request.form['stripeToken'],
             email = request.form['stripeEmail'],
             description = 'Pledge amount: %s' % amount
             )
-    '''
-    stripe_customer = create_stripe_customer(request, amount)
+    #stripe_customer = create_stripe_customer(request, amount)
     #print('STRIPE CUSTOMER ID: %s' % stripe_customer.id)
     # Save this user's data to the users table
     '''
