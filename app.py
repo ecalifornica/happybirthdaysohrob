@@ -197,7 +197,7 @@ def twitter():
             k.set_acl('public-read')
             '''
             #user_to_add.twitter_photo = filename
-            user_to_add.twitter_photo = twitter_profile_image()
+            user_to_add.twitter_photo = twitter_profile_image(api)
 
             # Insert this new user into the database.
             sql_session.add(user_to_add)

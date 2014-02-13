@@ -69,7 +69,7 @@ def http_to_https(request):
     url = url.replace('http', 'https')
     return url
    
-def twitter_profile_image():
+def twitter_profile_image(api):
     print('twitter_profile_image')
     print(api.me().screen_name)
     profile_image_url = api.me().profile_iamge_url
