@@ -123,13 +123,22 @@ def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
     # Save this user's data to the users table
     print('saving stripe user data')
     sql_user.stripe_token = request.form['stripeToken']
+    print(1)
     sql_user.stripe_customer_id = stripe_customer.id
+    print(2)
     sql_user.email = request.form['stripeEmail']
+    print(3)
     sql_user.name = request.form['stripeBillingName']
+    print(4)
     sql_user.city = request.form['stripeBillingAddressCity']
+    print(5)
     sql_user.state = request.form['stripeBillingAddressState']
+    print(6)
     sql_user.address = request.form['stripeBillingAddressLine1']
+    print(7)
     sql_user.zip_code = request.form['stripeBillingAddressZip']
+    print(8)
     sql_user.country = request.form['stripeBillingAddressCountry']
+    print(9)
     sql_session.commit()
     print('successfully commited stripe data to database')
