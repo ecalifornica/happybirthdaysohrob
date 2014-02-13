@@ -1,5 +1,5 @@
 import os 
-import requests
+#import requests
 
 mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 
@@ -73,7 +73,7 @@ def http_to_https(request):
 def twitter_profile_image(api):
     print('twitter_profile_image')
     print(api.me().screen_name)
-    profile_image_url = api.me().profile_iamge_url
+    profile_image_url = api.me().profile_image_url
     print(profile_image_url)
     profile_image_url = profile_image_url.replace('_normal', '')
     print(profile_image_url)

@@ -7,7 +7,7 @@ import stripe
 import tweepy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # For downloading the Twitter profile image.
-#import requests
+import requests
 # For storing Twitter profile images in S3. 
 import boto
 from boto.s3.connection import S3Connection
