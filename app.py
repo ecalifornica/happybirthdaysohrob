@@ -179,29 +179,17 @@ def twitter():
 @app.route('/charge', methods=['POST'])
 def charge():
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-    # For Stripe display
-    #amount = sql_user.pledge_amount
-    # Round down
-    #amount = math.trunc(float(amount))
-    # Stripe expects cents
-    #pledge_amount_cents = amount * 100
-    amount = format_pledge_amount(sql_user)
-
-    # Create the Stripe customer for later charging.  
-    '''
-    stripe_customer = stripe.Customer.create(
-            card=request.form['stripeToken'],
-            email = request.form['stripeEmail'],
-            description = 'Pledge amount: %s' % amount
-            )
-    '''
-    stripe_customer = create_stripe_customer(request, amount)
-
+    # Round down user's pledge amount.
+    #amount = format_pledge_amount(sql_user)
+    # Create the Stripe customer for charging later.  
+    #stripe_customer = create_stripe_customer(request, amount)
     # Save this user's data to the users table
-    save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
-
-    user_query  = sql_session.query(User)
-    total_pledges = sum_total_pledges(user_query)
+    #save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
+    stripe_transaction(sql_user, sql_session, request)
+    
+    # Percentage funded for plot.
+    #user_query  = sql_session.query(User)
+    #total_pledges = sum_total_pledges(user_query)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)

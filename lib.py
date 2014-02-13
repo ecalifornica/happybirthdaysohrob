@@ -58,7 +58,6 @@ class flask_login_user():
         return '<User %r>' % (self.id)
 
 def sum_total_pledges(user_query):
-    print('TOTAL PLEDGES FUNCTION')
     total_pledges = 0
     for row in user_query:
         if row.stripe_token is not None and row.pledge_amount is not None:
@@ -106,13 +105,14 @@ def twitter_profile_image(api):
     k.set_acl('public-read')
     return filename
 
+# Round down user's pledge amount.
 def format_pledge_amount(sql_user):
     amount = sql_user.pledge_amount
     amount = math.trunc(float(amount))
     return amount
 
+# Create Stripe customer for charging later.
 def create_stripe_customer(request, amount):
-    print('creating stripe customer')
     stripe_customer = stripe.Customer.create(
             card = request.form['stripeToken'],
             email = request.form['stripeEmail'],
@@ -120,26 +120,20 @@ def create_stripe_customer(request, amount):
             )
     return stripe_customer
 
+# Save this user's data to the users table.
 def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
-    # Save this user's data to the users table
-    print('saving stripe user data')
     sql_user.stripe_token = request.form['stripeToken']
-    print(1)
     sql_user.stripe_customer_id = stripe_customer.id
-    print(2)
     sql_user.email = request.form['stripeEmail']
-    print(3)
     sql_user.name = request.form['stripeBillingName']
-    print(4)
     sql_user.city = request.form['stripeBillingAddressCity']
-    print(5)
     sql_user.state = request.form['stripeBillingAddressState']
-    print(6)
     sql_user.address = request.form['stripeBillingAddressLine1']
-    print(7)
     sql_user.zip_code = request.form['stripeBillingAddressZip']
-    print(8)
     sql_user.country = request.form['stripeBillingAddressCountry']
-    print(9)
     sql_session.commit()
-    print('successfully commited stripe data to database')
+
+def stripe_transaction(sql_user, sql_session, request):
+    amount = format_pledge_aount(sql_user)
+    stripe_customer = create_stripe_customer(request, amount)
+    save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
