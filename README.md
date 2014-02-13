@@ -40,7 +40,7 @@ This site uses the technologies below to create a simple platform for engaging f
 
 -Properly handle multiple rows of pledges. Less bitbanging.
 
--Heroku https
+-~~Heroku https~~
 
 -Favicon
 
