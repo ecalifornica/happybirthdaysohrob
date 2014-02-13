@@ -1,5 +1,10 @@
 import os 
 import requests
+import boto
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
+S3_BUCKET = os.environ['S3_BUCKET']
 
 mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 

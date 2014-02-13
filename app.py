@@ -9,9 +9,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 # For downloading the Twitter profile image.
 #import requests
 # For storing Twitter profile images in S3. 
-import boto
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
+#import boto
+#from boto.s3.connection import S3Connection
+#from boto.s3.key import Key
 # SQLAlchemy
 from models import *
 from lib import *
@@ -36,7 +36,7 @@ consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
 
 #S3 Bucket
-S3_BUCKET = os.environ['S3_BUCKET']
+#S3_BUCKET = os.environ['S3_BUCKET']
 
 # Flask-Login
 login_manager = LoginManager()
