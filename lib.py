@@ -8,6 +8,15 @@ from boto.s3.key import Key
 
 S3_BUCKET = os.environ['S3_BUCKET']
 
+import stripe
+import math
+stripe_keys = {
+        'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
+        'secret_key': os.environ['STRIPE_SECRET_KEY']
+        }
+stripe.api_key = stripe_keys['secret_key']
+
+
 mattress_color = ['', '#a16b19;', '#f1716e;', '#a0a132;']
 
 def bit_bang_donor_string(user_query):
@@ -96,3 +105,31 @@ def twitter_profile_image(api):
     k.set_contents_from_filename(filepath)
     k.set_acl('public-read')
     return filename
+
+def format_pledge_amount(sql_user):
+    amount = sql_user.pledge_amount
+    amount = math.trunc(float(amount))
+    return amount
+
+def create_stripe_customer(request, amount):
+    print('creating stripe customer')
+    stripe_customer = stripe.Customer.create(
+            card = request.form['stripeToken'],
+            email = request.form['stripeEmail'],
+            description = 'Pledge amount: %s' % amount
+            )
+
+def save_stripe_user_data(sql_user, stripe_customer):
+    # Save this user's data to the users table
+    print('saving stripe user data')
+    sql_user.stripe_token = request.form['stripeToken']
+    sql_user.stripe_customer_id = stripe_customer.id
+    sql_user.email = request.form['stripeEmail']
+    sql_user.name = request.form['stripeBillingName']
+    sql_user.city = request.form['stripeBillingAddressCity']
+    sql_user.state = request.form['stripeBillingAddressState']
+    sql_user.address = request.form['stripeBillingAddressLine1']
+    sql_user.zip_code = request.form['stripeBillingAddressZip']
+    sql_user.country = request.form['stripeBillingAddressCountry']
+    sql_session.commit()
+    print('successfully commited stripe data to database')
