@@ -56,24 +56,16 @@ def tally_mattress_votes(user_query):
     return mattress_votes
 
 def http_to_https(request):
-    print('entering https_check')
     '''
     ssl_state = request.headers.get('X-Forwarded-Proto')
-    print(ssl_state)
     for i in request.headers:
         print(i)
     if ssl_state == 'http':
-        print('ssl_state is http')
         url = request.url
         url = url.replace('http://', 'https://')
-        print(url)
         return url
-    else:
-        break
     '''
     url = request.url
-    print(url)
-    url = replace('http', 'https')
-    print(url)
+    url = url.replace('http', 'https')
     return url
     
