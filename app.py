@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
 import stripe
 import tweepy
-# Should I be using Flask-Security instead?
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # For downloading the Twitter profile image.
 import requests
@@ -28,10 +27,16 @@ app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
 
+# Setting up PSQL for dev.
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+
 # Twitter OAuth
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
+
+#S3 Bucket
+S3_BUCKET = os.environ['S3_BUCKET']
 
 # Flask-Login
 login_manager = LoginManager()
@@ -50,17 +55,8 @@ percentage_complete = 0
 def index():
 
     # Redirect http to https.
-    ssl_state = request.headers.get('X-Forwarded-Proto')
-    for i in request.headers:
-        print(i)
-    try:
-        if ssl_state == 'http':
-            url = request.url
-            url = url.replace('http://', 'https://')
-            #print(url)
-            return redirect(url)
-    except:
-        print('request url replacement error')
+    if request.headers.get('X-Forwarded-Proto') == 'http':
+        return redirect(http_to_https(request))
 
     # Flask template variables.
     pledge_amount = 0
@@ -73,7 +69,6 @@ def index():
     change_amount = False
     vote_classes = ['', '', '']
 
-    print('DEBUG')
     user_query  = sql_session.query(User)
     total_pledges = sum_total_pledges(user_query)
     
@@ -94,7 +89,6 @@ def index():
         if sql_user.mattress_vote is not None:
             vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
 
-        # Should I be POSTing to /?
         if request.method == 'POST':
             try:
                 pledge_amount = request.form['charge_amount']
@@ -119,7 +113,6 @@ def index():
             # Placeholder for form pre-fill.
             amount_placeholder = str(pledge_amount)
 
-            # This be done better with ajax?
             if sql_user.stripe_token is not None:
                 enter_card = False
             else:
@@ -187,7 +180,6 @@ def twitter():
             profile_image_url = profile_image_url.replace('_normal', '')
             r = requests.get(profile_image_url)
 
-            # Must be a more elegant way to do this, but I'm tired.
             filetype = profile_image_url.split('.')[-1]
             filename = '%s.%s' % (api.me().screen_name, filetype)
             filepath = '/tmp/%s' % filename
@@ -197,8 +189,7 @@ def twitter():
 
             # S3
             conn = S3Connection()
-            #k = connection.Key(conn.get_bucket('happybirthdaysohrob', validate=False))
-            bucket = conn.get_bucket('happybirthdaysohrob')
+            bucket = conn.get_bucket(S3_BUCKET)
             k = Key(bucket)
             k.key = '%s' % filename
             k.set_contents_from_filename(filepath)

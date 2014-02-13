@@ -54,3 +54,18 @@ def tally_mattress_votes(user_query):
         if row.mattress_vote is not None:
             mattress_votes[int(row.mattress_vote) - 1] += 1
     return mattress_votes
+
+def http_to_https(request):
+    '''
+    ssl_state = request.headers.get('X-Forwarded-Proto')
+    for i in request.headers:
+        print(i)
+    if ssl_state == 'http':
+        url = request.url
+        url = url.replace('http://', 'https://')
+        return url
+    '''
+    url = request.url
+    url = url.replace('http', 'https')
+    return url
+    
