@@ -182,13 +182,15 @@ def charge():
     #stripe_customer = create_stripe_customer(request, amount)
     # Save this user's data to the users table
     #save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
-    stripe_transaction(sql_user, sql_session, request)
+    amount = stripe_transaction(sql_user, sql_session, request)
+    print('amount: %s' % amount)
     
     # Percentage funded for plot.
-    #user_query  = sql_session.query(User)
-    #total_pledges = sum_total_pledges(user_query)
+    user_query  = sql_session.query(User)
+    total_pledges = sum_total_pledges(user_query)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
+    print('message: %s' % message)
     flash(message)
     return redirect('/')
 
