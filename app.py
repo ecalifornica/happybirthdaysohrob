@@ -41,10 +41,7 @@ percentage_complete = 0
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
-    for i in request.headers:
-        print(i)
-
+    print('IP ADDRESS: %s' % request.headers.get('X-Forwarded-For'))
     # Redirect http to https.
     if request.headers.get('X-Forwarded-Proto') == 'http':
         return redirect(http_to_https(request))
