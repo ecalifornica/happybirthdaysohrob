@@ -129,15 +129,11 @@ def vote():
         sql_session.commit()
     return redirect('/')
 
-oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
-@app.route('/twitter-login/')
-def login():
-    oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
-    oauth_dancer.auth.secure = True
-    return redirect(oauth_dancer.auth.get_authorization_url())
 
 @app.route('/login/')
 def twitter():
+    oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
+
     if not request.args.get('oauth_token'):
         oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
         oauth_dancer.auth.secure = True
