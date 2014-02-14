@@ -144,3 +144,4 @@ def stripe_transaction(sql_user, sql_session, request):
     print('stripe_customer: %s' % stripe_customer)
     save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
     print('stripe user data saved')
+    return amount
