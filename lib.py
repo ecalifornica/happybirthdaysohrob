@@ -134,6 +134,6 @@ def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
     sql_session.commit()
 
 def stripe_transaction(sql_user, sql_session, request):
-    amount = format_pledge_aount(sql_user)
+    amount = format_pledge_amount(sql_user)
     stripe_customer = create_stripe_customer(request, amount)
     save_stripe_user_data(sql_user, sql_session, stripe_customer, request)

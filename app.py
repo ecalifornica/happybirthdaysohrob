@@ -42,6 +42,9 @@ percentage_complete = 0
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
+    for i in request.headers:
+        print(i)
+
     # Redirect http to https.
     if request.headers.get('X-Forwarded-Proto') == 'http':
         return redirect(http_to_https(request))
@@ -62,7 +65,6 @@ def index():
     
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
-    print('PERCENTAGE_COMPLETE: %s' % percentage_complete)
 
     # If the user is signed in.
     if current_user.is_authenticated():
@@ -70,7 +72,7 @@ def index():
         sign_in = False
         # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-        print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
+        #print('AUTHENTICATED SQL_USER: %s, CURRENT_USER.id: %s' % (sql_user, current_user.id))
         if sql_user.pledge_amount is not None:
             pledge_amount = sql_user.pledge_amount
 
@@ -78,10 +80,10 @@ def index():
             vote_classes[sql_user.mattress_vote - 1] = 'btn-success'
 
         if request.method == 'POST':
+            # Simple form validation.
             try:
                 pledge_amount = request.form['charge_amount']
                 pledge_amount = int(pledge_amount)
-                print("CHARGE AMOUNT: %s" % pledge_amount)
             except:
                 pledge_amount = 0
 
@@ -92,9 +94,8 @@ def index():
             change_amount = True
             # Pledge button text.
             amount_button_text = 'Change Pledge Amount'
-            print('PLEDGE_AMOUNT: %s, PLEDGE_AMOUNT TYPE: %s' % (pledge_amount, type(pledge_amount)))
+            print('PLEDGE_AMOUNT: %s' % pledge_amount)
             sql_user.pledge_amount = pledge_amount
-            print('SQL_USER.PLEDGE_AMOUNT: %s' % sql_user.pledge_amount)
             sql_session.commit()
             # Pledge amount in cents for Stripe
             pledge_amount_cents = pledge_amount * 100
@@ -155,11 +156,10 @@ def twitter():
 
         # Is this screen name already in the database?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-        print('CURRENT_USER.ID: %s' % current_user.id)
 
         # Add this screen name to the database if it is not found.
         if sql_user is None:
-            print('SESSION_USER.ID: %s' % session_user.id)
+            # SQLAlchemy unicode error.
             user_to_add.twitter_screen_name = session_user.id
             user_to_add.twitter_uid = api.me().id
 
