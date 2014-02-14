@@ -138,6 +138,11 @@ def login():
 
 @app.route('/login/')
 def twitter():
+    if not request.args.get('oauth_token'):
+        oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
+        oauth_dancer.auth.secure = True
+        return redirect(oauth_dancer.auth.get_authorization_url())
+
     user_to_add = User()
     token = oauth_dancer.auth.get_access_token(verifier=request.args.get('oauth_verifier'))
     oauth_dancer.auth.set_access_token(token.key, token.secret)
@@ -176,17 +181,11 @@ def twitter():
 @app.route('/charge', methods=['POST'])
 def charge():
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
-    # Round down user's pledge amount.
-    #amount = format_pledge_amount(sql_user)
-    # Create the Stripe customer for charging later.  
-    #stripe_customer = create_stripe_customer(request, amount)
-    # Save this user's data to the users table
-    #save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
     amount = stripe_transaction(sql_user, sql_session, request)
     
     # Percentage funded for plot.
-    user_query  = sql_session.query(User)
-    total_pledges = sum_total_pledges(user_query)
+    #user_query  = sql_session.query(User)
+    #total_pledges = sum_total_pledges(user_query)
 
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)

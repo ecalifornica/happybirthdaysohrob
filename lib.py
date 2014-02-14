@@ -134,7 +134,10 @@ def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
     sql_session.commit()
 
 def stripe_transaction(sql_user, sql_session, request):
+    # Round down pledge amount.
     amount = format_pledge_amount(sql_user)
+    # Create the Stripe customer for charging later.
     stripe_customer = create_stripe_customer(request, amount)
+    # Save user's data to the users table.
     save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
     return amount
