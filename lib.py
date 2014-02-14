@@ -107,14 +107,12 @@ def twitter_profile_image(api):
 
 # Round down user's pledge amount.
 def format_pledge_amount(sql_user):
-    print('formatting amount')
     amount = sql_user.pledge_amount
     amount = math.trunc(float(amount))
     return amount
 
 # Create Stripe customer for charging later.
 def create_stripe_customer(request, amount):
-    print('creating stripe customer')
     stripe_customer = stripe.Customer.create(
             card = request.form['stripeToken'],
             email = request.form['stripeEmail'],
@@ -124,7 +122,6 @@ def create_stripe_customer(request, amount):
 
 # Save this user's data to the users table.
 def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
-    print('saving stripe user data')
     sql_user.stripe_token = request.form['stripeToken']
     sql_user.stripe_customer_id = stripe_customer.id
     sql_user.email = request.form['stripeEmail']
@@ -137,11 +134,7 @@ def save_stripe_user_data(sql_user, sql_session, stripe_customer, request):
     sql_session.commit()
 
 def stripe_transaction(sql_user, sql_session, request):
-    print('stripe_transaction')
     amount = format_pledge_amount(sql_user)
-    print('amount: %s' % amount)
     stripe_customer = create_stripe_customer(request, amount)
-    print('stripe_customer: %s' % stripe_customer)
     save_stripe_user_data(sql_user, sql_session, stripe_customer, request)
-    print('stripe user data saved')
     return amount
