@@ -132,9 +132,11 @@ def vote():
 
 @app.route('/login/')
 def twitter():
+    print('login')
     if oauth_dancer is None:
+        print('oauth is none')
         oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
-
+    print(oauth_dancer)
     if not request.args.get('oauth_token'):
         oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
         oauth_dancer.auth.secure = True
