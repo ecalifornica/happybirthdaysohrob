@@ -7,26 +7,22 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from lib import *
 # SQLAlchemy
 from models import *
+sql_session = scoped_session(sessionmaker(engine))
 # Flask
 app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
-
 # Twitter OAuth
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
 consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 callback_url = os.environ['TWITTER_OAUTH_CALLBACK_URL']
-
+oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-# Flask-Login        
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
-
-sql_session = scoped_session(sessionmaker(engine))
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -34,7 +30,6 @@ def index():
     # Redirect http to https.
     if request.headers.get('X-Forwarded-Proto') == 'http':
         return redirect(http_to_https(request))
-
     # Flask template variables.
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
@@ -45,18 +40,14 @@ def index():
     enter_card = False
     change_amount = False
     vote_classes = ['', '', '']
-
     user_query  = sql_session.query(User)
     total_pledges = sum_total_pledges(user_query)
-    
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
-
     # If the user is signed in.
     if current_user.is_authenticated():
         # Hide sign in button.
         sign_in = False
-        # Is there a better way to make this query?
         sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
         if sql_user.pledge_amount is not None:
             pledge_amount = sql_user.pledge_amount
@@ -69,7 +60,6 @@ def index():
                 pledge_amount = int(pledge_amount)
             except:
                 pledge_amount = 0
-
         # If the user has actually entered and saved an amount.
         if pledge_amount is not 0 and pledge_amount is not None:
             # Don't show pledge amount entry box.
@@ -92,21 +82,12 @@ def index():
         else:
             enter_amount = True
             amount_button_text = 'Set Pledge Amount'
-
     # If the user is not authenticated, ask them to sign in.
     else:
         sign_in = True
-
     # Create the donors list html string.
     user_query = sql_session.query(User)
     donors = Markup(bit_bang_donor_string(user_query))
-
-    context = {}
-    context['key'] = key
-    context['signin'] = sign_in
-    context['enteramount'] = enter_amount
-
-
     return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_classes[0], vote_two_classes=vote_classes[1], vote_three_classes=vote_classes[2], pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
 
 # Route for mattress choice form submission.
@@ -119,12 +100,10 @@ def vote():
         sql_session.commit()
     return redirect('/')
 
-
 @app.route('/login/')
 def twitter():
 
     if not request.args.get('oauth_token'):
-        oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
         oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
         oauth_dancer.auth.secure = True
         return redirect(oauth_dancer.auth.get_authorization_url())
