@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
 import tweepy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from lib import *
+from lib import bit_bang_donor_string, sum_total_pledges, http_to_https, twitter_profile_image, stripe_transaction
 # SQLAlchemy
 from models import *
 sql_session = scoped_session(sessionmaker(engine))
@@ -102,7 +102,6 @@ def vote():
 
 @app.route('/login/')
 def twitter():
-
     if not request.args.get('oauth_token'):
         oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
         oauth_dancer.auth.secure = True
@@ -114,7 +113,6 @@ def twitter():
     api = tweepy.API(oauth_dancer.auth)
     oauth_dancer.twitter_screen_name = api.me().screen_name
     #print api.me().__getstate__()
-
     if oauth_dancer.twitter_screen_name is not None:
         # Flask-Login
         session_user = flask_login_user(oauth_dancer.twitter_screen_name)
@@ -131,10 +129,8 @@ def twitter():
             # Insert this new user into the database.
             sql_session.add(user_to_add)
             sql_session.commit()
-
         print('LOGIN SUCCESSFUL FOR %s' % current_user.id)
         return redirect('/')
-
     # Login declined, redirect to informative page.
     return redirect('/about/')
 
@@ -142,7 +138,6 @@ def twitter():
 def charge():
     sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
     amount = stripe_transaction(sql_user, sql_session, request)
-    
     message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
     flash(message)
     return redirect('/')
