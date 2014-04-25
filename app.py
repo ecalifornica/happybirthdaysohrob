@@ -1,12 +1,14 @@
 import os
-import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
-from flask import Flask, render_template, request, redirect, url_for, session, flash, Markup
+from flask import (Flask, render_template, request, redirect, flash,
+                   Markup)
 import tweepy
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from lib import bit_bang_donor_string, sum_total_pledges, http_to_https, twitter_profile_image, stripe_transaction
+from flask_login import LoginManager, login_user, current_user
+from lib import (bit_bang_donor_string, sum_total_pledges, http_to_https,
+                 twitter_profile_image, stripe_transaction,
+                 oauth_placeholder, flask_login_user, stripe_keys)
 # SQLAlchemy
-from models import *
+from models import engine, User
 sql_session = scoped_session(sessionmaker(engine))
 # Flask
 app = Flask(__name__)
@@ -20,9 +22,12 @@ oauth_dancer = oauth_placeholder(consumer_key, consumer_secret, callback_url)
 # Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
 @login_manager.user_loader
 def load_user(userid):
     return flask_login_user(userid)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -34,13 +39,13 @@ def index():
     pledge_amount = 0
     pledge_amount_cents = pledge_amount * 100
     amount_placeholder = str(pledge_amount)
-    key=stripe_keys['publishable_key']
+    key = stripe_keys['publishable_key']
     enter_amount = False
     amount_button_text = 'Set Pledge Amount'
     enter_card = False
     change_amount = False
     vote_classes = ['', '', '']
-    user_query  = sql_session.query(User)
+    user_query = sql_session.query(User)
     total_pledges = sum_total_pledges(user_query)
     # For displaying percentage funded.
     percentage_complete = int(100 * (float(total_pledges) / 682.0))
@@ -48,7 +53,8 @@ def index():
     if current_user.is_authenticated():
         # Hide sign in button.
         sign_in = False
-        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        sql_user = sql_session.query(User).filter_by(
+            twitter_screen_name=current_user.id).first()
         if sql_user.pledge_amount is not None:
             pledge_amount = sql_user.pledge_amount
         if sql_user.mattress_vote is not None:
@@ -88,37 +94,59 @@ def index():
     # Create the donors list html string.
     user_query = sql_session.query(User)
     donors = Markup(bit_bang_donor_string(user_query))
-    return render_template('index.html', key=key, signin=sign_in, enteramount=enter_amount, amount=pledge_amount_cents, amount_placeholder=amount_placeholder, amount_button=amount_button_text, entercard=enter_card, percentage_complete=percentage_complete, vote_one_classes=vote_classes[0], vote_two_classes=vote_classes[1], vote_three_classes=vote_classes[2], pledge_amount='$%s' % str(pledge_amount), change_amount=change_amount, donors=donors) 
+    return render_template('index.html',
+                           key=key,
+                           signin=sign_in,
+                           enteramount=enter_amount,
+                           amount=pledge_amount_cents,
+                           amount_placeholder=amount_placeholder,
+                           amount_button=amount_button_text,
+                           entercard=enter_card,
+                           percentage_complete=percentage_complete,
+                           vote_one_classes=vote_classes[0],
+                           vote_two_classes=vote_classes[1],
+                           vote_three_classes=vote_classes[2],
+                           pledge_amount='$%s' % str(pledge_amount),
+                           change_amount=change_amount,
+                           donors=donors)
+
 
 # Route for mattress choice form submission.
 @app.route('/vote/', methods=['POST'])
 def vote():
     if current_user.is_authenticated():
         # Is there a better way to make this query?
-        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        sql_user = sql_session.query(User).filter_by(
+            twitter_screen_name=current_user.id).first()
         sql_user.mattress_vote = request.form['mattress_vote']
         sql_session.commit()
     return redirect('/')
 
+
 @app.route('/login/')
 def twitter():
     if not request.args.get('oauth_token'):
-        oauth_dancer.auth = tweepy.OAuthHandler(oauth_dancer.consumer_key, oauth_dancer.consumer_secret, oauth_dancer.callback_url)
+        oauth_dancer.auth = tweepy.OAuthHandler(
+            oauth_dancer.consumer_key,
+            oauth_dancer.consumer_secret,
+            oauth_dancer.callback_url)
         oauth_dancer.auth.secure = True
         return redirect(oauth_dancer.auth.get_authorization_url())
 
     user_to_add = User()
-    token = oauth_dancer.auth.get_access_token(verifier=request.args.get('oauth_verifier'))
+    token = oauth_dancer.auth.get_access_token(
+        verifier=request.args.get('oauth_verifier'))
     oauth_dancer.auth.set_access_token(token.key, token.secret)
     api = tweepy.API(oauth_dancer.auth)
     oauth_dancer.twitter_screen_name = api.me().screen_name
-    #print api.me().__getstate__()
+    # print api.me().__getstate__()
     if oauth_dancer.twitter_screen_name is not None:
         # Flask-Login
         session_user = flask_login_user(oauth_dancer.twitter_screen_name)
         login_user(session_user)
         # Is this screen name already in the database?
-        sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+        sql_user = sql_session.query(User).filter_by(
+            twitter_screen_name=current_user.id).first()
         # Add this screen name to the database if it is not found.
         if sql_user is None:
             # SQLAlchemy unicode error.
@@ -134,24 +162,32 @@ def twitter():
     # Login declined, redirect to informative page.
     return redirect('/about/')
 
+
 @app.route('/charge', methods=['POST'])
 def charge():
-    sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+    sql_user = sql_session.query(User).filter_by(
+        twitter_screen_name=current_user.id).first()
     amount = stripe_transaction(sql_user, sql_session, request)
-    message = Markup('<strong>Thank you</strong> for your pledge of <strong>$%s</strong>. You will receive an email if we reach our goal and your card is charged.' % amount)
+    message = Markup('<strong>Thank you</strong> for your pledge of \
+            <strong>$%s</strong>. You will receive an email if \
+            we reach our goal and your card is charged.' % amount)
     flash(message)
     return redirect('/')
 
+
 @app.route('/change_amount/')
 def change_amount():
-    sql_user = sql_session.query(User).filter_by(twitter_screen_name=current_user.id).first()
+    sql_user = sql_session.query(User).filter_by(
+        twitter_screen_name=current_user.id).first()
     sql_user.pledge_amount = 0
     sql_session.commit()
     return redirect('/')
 
+
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 if __name__ == '__main__':
     app.run(host='blametommy.com')
