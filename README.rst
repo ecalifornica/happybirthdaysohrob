@@ -1,14 +1,19 @@
-#Happy Birthday Sohrob
+=====================
+Happy Birthday Sohrob
+=====================
 
-###Why
+Why
+---
 
 Twitter's @hackweek was my inspiration to realize this idea that I've been kicking around for months. I also felt like taking a break from my hardware-software home security project for a blank slate and new problems. 
 
-###What 
+What 
+----
 
 This site uses the technologies below to create a simple platform for engaging friends to leverage social capital into collective capital. Rather than separately buying our friend many bottles of bourbon, I'm hoping we can band together to acquire for him a greater gift. Besides buying Sohrob a new mattress, which he desperately needs, this site has allowed me to try my hand at a few new skills or get more familiar with previously learned ones. 
 
-###How
+How
+---
 
 **Flask** I definitely feel much more familiar with Flask, and find myself seeing uses for it everywhere. While I see problems to surmount everywhere I look, I attempt to step back and remind myself that I can interact with my code through the browser now.
                 
@@ -22,7 +27,8 @@ This site uses the technologies below to create a simple platform for engaging f
 
 **S3** I've barely scratched the surface of S3/Boto, let alone the rest of the Amazon offerings. I'm happy that I can read documentation well enough to pick up libraries quickly, but I still want to find time to interact with S3 and the Twitter API without libraries.
 
-###To do
+To do
+-----
 
 -Use Javascript to submit forms.
 
@@ -44,6 +50,7 @@ This site uses the technologies below to create a simple platform for engaging f
 
 -Favicon
 
-###Who
+Who
+---
 
-My name is Robert. I work with vim and tmux on Linode and Heroku. I would very much appreciate any notes, suggestions, ideas, and bug reports.
+My name is Robert. I work with vim and tmux on Linux. I would very much appreciate any notes, suggestions, ideas, and bug reports.

@@ -1,9 +1,8 @@
-cruft
 *.pyc
-notes.txt
+*.swp
+venv
 alembic.ini
 alembic
-venv
-*.swp
 static/data.csv
 settings.txt
+notes.txt
